@@ -94,30 +94,29 @@ Extending
 ---------
 
 To construct bag-of-words for a new document(s), extend the implementation for 
-ctrus.util.bow.DefaultBagOfWords and implement methods setup() and create(). To provide
-more options (passed as command line arguments) extend the implementation for
-ctrus.util.bow.DefaultOptions and implement method defineOptions().
+ctrus.pa.bow.core.DefaultBagOfWords and implement methods setup() and create(). To 
+provide more options (passed as command line arguments) extend the implementation for
+ctrus.pa.bow.core.DefaultOptions and implement method defineOptions().
 
 To yield good results from a bag-of-words model, terms have to be pre-processed. This 
 module provides an extensible approach to add a chain of filters and transformers. A
 filter will decide if a term should be added to the model. For example, very high 
 frequency words in an English text are filtered. Similarly, length of a term in the 
 model can be controlled through a filter. A custom filter can be added by extending
-BaseFilter and implementing filter(term) method. For easy access to the filters a 
-FilterFactory class is provided. The custom filter can be made available by extending 
-BaseFilterFactory. 
+ctrus.pa.bow.term.filter.BaseFilter and implementing filter(term) method. For easy 
+access to the filters a ctrus.pa.bow.term.FilterFactory class is provided. A custom 
+filter can be made available by extending ctrus.pa.bow.term.filter.BaseFilterFactory. 
 
 A transformer will facilitate modification of a term. For example, a camel-cased word 
 is transformed into multiple terms split at every capital case character. In case a 
 term is transformed to multiple terms, the transformer should return multiple terms 
 as a single string with each term separated by a single space. So a term - 
 "LifeIsMagic" is transformed by CamelCaseTransformer as - "Life Is Magic". A custom 
-transformer can be added by extending BaseTransformer and implementing transform(term)
-method. For easy access to the transformers a TransformerFactory class is provided.
-The custom transformer can be made available by extending BaseTrasformerFactory.
+transformer can be added by extending ctrus.pa.bow.term.transformation.BaseTransformer 
+and implementing transform(term) method. For easy access to the transformers a 
+ctrus.pa.bow.term.TransformerFactory class is provided. A custom transformer can be 
+made available by extending ctrus.pa.bow.term.transformation.BaseTrasformerFactory.
 
-
-http://stackoverflow.com/questions/21473308/integrating-eclipse-and-github
 
 General Information
 -------------------
