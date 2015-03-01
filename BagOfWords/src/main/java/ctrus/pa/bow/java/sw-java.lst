@@ -1,0 +1,17 @@
+# Modifiers and key words
+public
+protected
+private
+static
+abstract
+final
+native
+synchronized
+transient
+volatile
+strictfp
+void
+null
+
+# Standard methods
+main
