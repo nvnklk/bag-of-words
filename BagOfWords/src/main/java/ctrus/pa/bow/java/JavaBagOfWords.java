@@ -71,10 +71,13 @@ public class JavaBagOfWords extends DefaultBagOfWords {
 		try {
 		
 			boolean methodChunk = _options.hasOption(JavaBOWOptions.METHOD_CHUNKING);
+			boolean ignoreComments = _options.hasOption(JavaBOWOptions.IGNORE_COMMENTS);
 			
-			Collection<File> srcfiles = getSourceDocuments("*.java");			
+			// Set up Java source text file tokenizer			
 			JavaFileTokenizer jTokenizer = new JavaFileTokenizer();
+			jTokenizer.setIgnoreComments(ignoreComments);
 			
+			Collection<File> srcfiles = getSourceDocuments("*.java");
 			int totalFiles = srcfiles.size();
 			int currentFile = 0;
 			CtrusHelper.printToConsole("Total files - " + srcfiles.size());			

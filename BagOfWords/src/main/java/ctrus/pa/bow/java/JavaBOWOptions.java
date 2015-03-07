@@ -28,10 +28,9 @@ public class JavaBOWOptions extends DefaultOptions {
 	
 	public final static String METHOD_CHUNKING			= "methodChunking";	
 	public final static String SPLIT_CAMELCASE			= "splitCamelCase";		
-	public final static String CONSIDER_COPYRIGHT		= "considerCopyright";
-	public final static String RETAIN_COMPOUND_WORDS	= "retainCompoundWords";	
-	public final static String IGNORE_API_COMMENTS		= "ignoreAPIComments";
-	public final static String IGNORE_INLINE_COMMENTS	= "ignoreInlineComments";
+//	public final static String CONSIDER_COPYRIGHT		= "considerCopyright";
+//	public final static String RETAIN_COMPOUND_WORDS	= "retainCompoundWords";	
+	public final static String IGNORE_COMMENTS			= "ignoreComments";
 		
 	// Closed constructor
 	private JavaBOWOptions() {
@@ -46,32 +45,27 @@ public class JavaBOWOptions extends DefaultOptions {
 				.withDescription("Split camel cased terms")
 				.create(SPLIT_CAMELCASE);
 		addOption(o1);					
-		
+/*		
 		Option o3 =  OptionBuilder.hasArg(false)
 				.withDescription("Consider terms from copyright notice in source files")
 				.create(CONSIDER_COPYRIGHT);
 		addOption(o3);	
-				
+*/				
 		Option o4 =  OptionBuilder.hasArg(false)
-				.withDescription("Ignore API comments in source files")
-				.create(IGNORE_API_COMMENTS);
+				.withDescription("Ignore comments in source files")
+				.create(IGNORE_COMMENTS);
 		addOption(o4);	
 				
-		Option o5 =  OptionBuilder.hasArg(false)
-				.withDescription("Ignore inline comments in source files")
-				.create(IGNORE_INLINE_COMMENTS);
-		addOption(o5);
-
 		Option o6 =  OptionBuilder.hasArg(false)
 				.withDescription("Create BOW model per method, default is per class")
 				.create(METHOD_CHUNKING);
 		addOption(o6);		
-		
+/*		
 		Option o7 =  OptionBuilder.hasArg(false)
 				.withDescription("Retain compound terms (eg.camel cased) in the model")
 				.create(RETAIN_COMPOUND_WORDS);
 		addOption(o7);		
-
+*/
 	}
 
 	@Override

@@ -43,6 +43,9 @@ public class JavaTransformerFactoryImpl extends BaseTransformerFactory implement
 	}
 
 	public TermTransformer createCamelcaseTransformer() {
-		return new CamelcaseTransformer();
+		CamelcaseTransformer ct = new CamelcaseTransformer();
+		if(!hasOption(JavaBOWOptions.SPLIT_CAMELCASE))
+			ct.setEnabled(false);
+		return ct;
 	}
 }
