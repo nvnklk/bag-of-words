@@ -21,8 +21,8 @@ SET ja_classpath=%en_classpath%;%jdt-core%;%core-contenttype%;%core-jobs%;%core-
 
 SET option1=-minWordLength 3 -useStemming -printVocabulary
 SET option2=%option1% -retainNum -methodChunking -splitCamelCase -hashTerms 4
-SET option3=-sourceDir ./data/en -ouputDir ./ -outputSingleFile en_bow.txt
-SET option4=-sourceDir ./data/java -ouputDir ./ -outputSingleFile java_bow.txt
+SET option3=-sourceDir ./data/en -ouputDir ./output -outputSingleFile en_bow.txt
+SET option4=-sourceDir ./data/java -ouputDir ./output -outputSingleFile java_bow.txt
 
 IF [%1] == [help]	GOTO param_help
 IF [%1] == [en] 	GOTO param_english
