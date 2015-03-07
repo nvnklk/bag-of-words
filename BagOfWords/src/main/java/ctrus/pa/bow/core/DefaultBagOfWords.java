@@ -28,6 +28,7 @@ import java.util.Collection;
 
 import org.apache.commons.cli.MissingOptionException;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.filefilter.DirectoryFileFilter;
 import org.apache.commons.io.filefilter.WildcardFileFilter;
 
@@ -37,7 +38,8 @@ public abstract class DefaultBagOfWords extends UnWeightedBagOfWords {
 		
 	protected static final String DEFAULT_OUTPUT_DIR 		= "output";
 	protected static final String DEFAULT_OUTPUT_FILE 		= "bow.txt";
-	protected static final String DEFAULT_VOCABULARY_FILE 	= "voc.txt";
+	protected static final String DEFAULT_TERM_VOCAB_FILE 	= "term.txt";
+	protected static final String DEFAULT_DOC_VOCAB_FILE 	= "doc.txt";
 	
 	protected BOWOptions 		_options 		= null;
 	protected File				_outputDir		= null;
@@ -93,13 +95,12 @@ public abstract class DefaultBagOfWords extends UnWeightedBagOfWords {
 	}
 	
 	// Write the terms collected to output file
-	protected void writeToOutput(String fileName) throws IOException {				
-		if(_singleFileOut){	
+	protected void writeToOutput(String doc) throws IOException {				
+		if(_singleFileOut){
+			IOUtils.write(doc + "=", _out);
 			writeTo(_out);
 		} else {			
-			int indexOfDot = fileName.lastIndexOf("."); 
-			if( indexOfDot != -1) fileName = fileName.substring(0, indexOfDot);					
-			_out = new FileOutputStream(new File(_outputDir, fileName));
+			_out = new FileOutputStream(new File(_outputDir, doc));
 			writeTo(_out);					
 			_out.close();
 			_out = null;
@@ -126,8 +127,14 @@ public abstract class DefaultBagOfWords extends UnWeightedBagOfWords {
 			} catch(MissingOptionException ex) {
 				outputFileString = "." + File.separator;
 			}
-			outputFileString = outputFileString + File.separator + DEFAULT_VOCABULARY_FILE;  
-			Vocabulary.getInstance().writeTo(FileUtils.openOutputStream(new File(outputFileString)));		
+			String outputFileString1 = outputFileString + File.separator + DEFAULT_TERM_VOCAB_FILE;
+			String outputFileString2 = outputFileString + File.separator + DEFAULT_DOC_VOCAB_FILE;
+			
+			// Write terms
+			Vocabulary.getInstance().writeTermVocabularyTo(FileUtils.openOutputStream(new File(outputFileString1)));
+			
+			// Write doc
+			Vocabulary.getInstance().writeDocVocabularyTo(FileUtils.openOutputStream(new File(outputFileString2)));
 		}
 	}
 }

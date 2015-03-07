@@ -60,12 +60,12 @@ public abstract class UnWeightedBagOfWords implements BagOfWords {
 		throw new NotImplementedException("Term weight is not supported in UnWeightedBagOfWords");	
 	}
 	
-	public final void addTerms(String[] terms) {
+	public final void addTerms(String[] terms, String doc) {
 		for(String term : terms)
-			addTerm(term);
+			addTerm(term, doc);
 	}
 		
-	public final void addTerm(String term) {
+	public final void addTerm(String term, String doc) {
 		// Is it required to be added?
 		if(_filterations.filter(term)) return;
 		
@@ -81,7 +81,7 @@ public abstract class UnWeightedBagOfWords implements BagOfWords {
 					_terms.add(eachTerm);
 			}
 			// Add to vocabulary
-			Vocabulary.getInstance().add(transformedTerm);
+			Vocabulary.getInstance().addTerm(transformedTerm, doc);
 		}
 		
 	}

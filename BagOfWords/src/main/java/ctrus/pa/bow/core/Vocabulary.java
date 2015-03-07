@@ -22,16 +22,38 @@ package ctrus.pa.bow.core;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.Serializable;
 import java.util.concurrent.ConcurrentNavigableMap;
+import java.util.concurrent.atomic.AtomicLong;
 
 import org.apache.commons.io.IOUtils;
 import org.mapdb.DB;
 import org.mapdb.DBMaker;
 
-public class Vocabulary {
+public class Vocabulary implements Serializable {
+	
+	private static final long serialVersionUID = -668965040667128267L;
+	private static AtomicLong term_counter = new AtomicLong(0);
+	private static AtomicLong doc_counter = new AtomicLong(0);
 	
 	private static Vocabulary _instance = null;
-	private ConcurrentNavigableMap<String, Integer> _vocabulary = null;
+	private ConcurrentNavigableMap<String, TermMeta> _termVocabulary = null;
+	private ConcurrentNavigableMap<String, DocMeta> _docVocabulary = null;
+		
+	private class DocMeta implements Serializable {
+		
+		private static final long serialVersionUID = 3217146017692636352L;
+		public long doc_id = 0;
+		public String file_name = "";		
+	}
+	
+	private class TermMeta implements Serializable {
+		
+		private static final long serialVersionUID = 5448836097415306367L;
+		public long term_id = 0;
+		public long doc_id = 0;
+		public int  freq = 1;		
+	}
 
 	private Vocabulary() {}
 	
@@ -43,23 +65,48 @@ public class Vocabulary {
 								 .deleteFilesAfterClose()
 								 .closeOnJvmShutdown()
 								 .make();
-		_vocabulary = vocabularyDB.getTreeMap("Vocabulary");
+		_termVocabulary = vocabularyDB.getTreeMap("TERM_VOCABULARY");
+		_docVocabulary = vocabularyDB.getTreeMap("DOC_VOCABULARY");
 	}
 	
-	public void add(String term) {
+	public void addTerm(String term, String doc) {
 		// Add to vocabulary
-		if(_vocabulary.containsKey(term)) {				
-			Integer count = _vocabulary.get(term);								
-			_vocabulary.put(term, ++count);					
+		if(_termVocabulary.containsKey(term)) {				
+			TermMeta tm = _termVocabulary.get(term);								
+			tm.freq++;					
 		} else {
-			_vocabulary.put(term, 1);
+			if(!_docVocabulary.containsKey(doc))
+				throw new IllegalArgumentException("Document " + doc + " not found in the vocabulary");
+			
+			TermMeta tm = new TermMeta();
+			tm.term_id = term_counter.incrementAndGet();
+			tm.doc_id = _docVocabulary.get(doc).doc_id;			
+			_termVocabulary.put(term, tm);
 		}
 	}
 	
-	public final void writeTo(OutputStream out) throws IOException {
-		
-		for(String term : _vocabulary.keySet()) {
-			IOUtils.write(term + "," + _vocabulary.get(term) + "\n", out);
+	public void addDocument(String docref, String file) {
+		// Add to vocabulary
+		if(!_docVocabulary.containsKey(docref)) {
+			DocMeta dm = new DocMeta();
+			dm.doc_id = doc_counter.incrementAndGet();
+			dm.file_name = file;
+			_docVocabulary.put(docref, dm);
+		}			
+	}
+	
+	public final void writeDocVocabularyTo(OutputStream out) throws IOException {
+		for(String docref : _docVocabulary.keySet()) {
+			DocMeta d = _docVocabulary.get(docref); 
+			IOUtils.write(d.doc_id + "," + docref + "," + d.file_name + "\n", out);			
+		}
+	}
+	
+	public final void writeTermVocabularyTo(OutputStream out) throws IOException {
+		IOUtils.write("TERM_ID,TERM,DOC_ID,FREQ \n", out);		
+		for(String term : _termVocabulary.keySet()) {
+			TermMeta t = _termVocabulary.get(term);
+			IOUtils.write(t.term_id + "," + term + "," + t.doc_id + "," + t.freq + "\n", out);
 		}
 	}
 	

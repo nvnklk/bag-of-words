@@ -29,6 +29,7 @@ import org.apache.commons.lang3.ArrayUtils;
 
 import ctrus.pa.bow.core.DefaultBagOfWords;
 import ctrus.pa.bow.core.DefaultOptions;
+import ctrus.pa.bow.core.Vocabulary;
 import ctrus.pa.bow.java.token.ClassTokens;
 import ctrus.pa.bow.java.token.MethodTokens;
 import ctrus.pa.bow.term.FilterFactory;
@@ -91,10 +92,14 @@ public class JavaBagOfWords extends DefaultBagOfWords {
 					for(String mId : c.getMethodIdentifiers()) {
 						MethodTokens m = c.getMethodTokens(mId);						
 						if(methodChunk) {
-							addTerms(ArrayUtils.addAll(m.getTokens(), tokens));
-							// TBD:: Add document to file name mapping here
-							String fileName = CtrusHelper.uniqueId(m.getIdentifier()).toString();
-							writeToOutput(fileName);
+							String docref = CtrusHelper.uniqueId(m.getIdentifier()).toString();
+							
+							// Add document to the vocabulary first before adding terms
+							Vocabulary.getInstance().addDocument(docref, srcFile.getName());
+							
+							addTerms(ArrayUtils.addAll(m.getTokens(), tokens), docref);
+							// TBD:: Add document to file name mapping here							
+							writeToOutput(docref);
 							reset();  // Reset so that next method tokens can 
 									  // be added as new document 
 						} else {
@@ -103,20 +108,23 @@ public class JavaBagOfWords extends DefaultBagOfWords {
 					}
 					
 					if(!methodChunk) {
-						// Add all collected tokens as terms
-						addTerms(tokens);
+						// Add document to file name mapping
+						String docref = CtrusHelper.uniqueId(c.getIdentifier()).toString();
+
+						// Add document to the vocabulary first before adding terms
+						Vocabulary.getInstance().addDocument(docref, srcFile.getName());
 						
-						// TBD:: Add document to file name mapping here
-						String fileName = CtrusHelper.uniqueId(c.getIdentifier()).toString();
-						writeToOutput(fileName);
+						// Add all collected tokens as terms
+						addTerms(tokens, docref);
+						
+						writeToOutput(docref);
 						reset(); // Reset so that next class tokens can 
 						  		 // be added as new document
 					}
 						
 				}
 				
-				
-				currentFile++;						// Update the counter
+				currentFile++;	// Update the counter
 				// print progress
 				CtrusHelper.progressMonitor("Progress - ", currentFile, totalFiles);
 			}

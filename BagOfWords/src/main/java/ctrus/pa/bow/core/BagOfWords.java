@@ -30,9 +30,9 @@ public interface BagOfWords {
 	
 	public void addTerm(String word, double weight);
 		
-	public void addTerm(String term);
+	public void addTerm(String term, String doc);
 	
-	public void addTerms(String[] terms);
+	public void addTerms(String[] terms, String doc);
 			
 	public void reset();
 		

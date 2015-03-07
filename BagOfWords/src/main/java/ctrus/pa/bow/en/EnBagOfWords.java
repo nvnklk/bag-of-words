@@ -29,6 +29,7 @@ import org.apache.commons.io.FileUtils;
 import ctrus.pa.bow.core.BOWOptions;
 import ctrus.pa.bow.core.DefaultBagOfWords;
 import ctrus.pa.bow.core.DefaultOptions;
+import ctrus.pa.bow.core.Vocabulary;
 import ctrus.pa.bow.term.FilterFactory;
 import ctrus.pa.bow.term.TermFilteration;
 import ctrus.pa.bow.term.TermTransformation;
@@ -74,14 +75,21 @@ public class EnBagOfWords extends DefaultBagOfWords {
 			
 			for(File srcFile : srcfiles) {
 								
+				// Add document to file name mapping
+				String fileName = srcFile.getName();
+				String docref = CtrusHelper.uniqueId(fileName).toString();
+
+				// Add document to the vocabulary first before adding terms
+				Vocabulary.getInstance().addDocument(docref, fileName);
+
 				Iterator<String> lines = FileUtils.lineIterator(srcFile); 				
 				while(lines.hasNext()) {					
 					String line = lines.next();
-					addTerms(line.split("\\p{Space}"));					
+					addTerms(line.split("\\p{Space}"), docref);					
 				}
 				
-				writeToOutput(srcFile.getName());	// Write BOW to output file							
-				reset();							// Reusing BOW, make sure to reset
+				writeToOutput(docref);	// Write BOW to output file							
+				reset();				// Reusing BOW, make sure to reset
 				
 				currentFile++;						// Update the counter
 				// print progress
