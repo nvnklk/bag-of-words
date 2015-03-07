@@ -1,5 +1,7 @@
 Bag of Words
 ============
+Create a multiset (bag) of terms for a corpus where multiplicity of terms are 
+preserved but not the word order.
  
 Bag-Of-Words (BOW) is a popular data representation model for many Information 
 Retrieval (IR) and Text processing methods. A term is an unit in this model and a 
@@ -86,8 +88,7 @@ Additional options for JavaBagOfWords
 	-splitCamelCase 		  Split camel cased words
 	-retainCompoundWords	  Retain compound terms (eg.camel cased) in the model
 	-methodChunking 		  Create BOW model per method, default is per class
-	-ignoreAPIComments		  Ignore inline comments in source files
-	-ignoreAPIComments		  Ignore API comments in source files
+	-ignoreComments		  	  Ignore comments in source files
 	-considerCopyright		  Consider terms from copyright notice in source files	
 
 Extending
@@ -136,8 +137,8 @@ Please direct questions to [Naveen Kulkarni](naveen.kulkarni@research.iiit.ac.in
 	http://commons.apache.org/proper/commons-io/
 
 4. Eclipse JDT - A Java Parser with AST generation
-	https://eclipse.org/jdt/
-	Specifically, following jars are referenced
+	https://eclipse.org/jdt/, specifically, following jars are referenced
+	
 		org.eclipse.jdt.core
 		org.eclipse.core.contenttype
 		org.eclipse.core.jobs
@@ -152,11 +153,6 @@ Please direct questions to [Naveen Kulkarni](naveen.kulkarni@research.iiit.ac.in
 	
 5. English Stop words 
 	https://code.google.com/p/stop-words/
-	
-### Version history
-
-0.1 Beta (2015-03-01)
-	* First version
 	
 ### License
 
@@ -176,5 +172,5 @@ WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
 or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License 
 for more details.
 
-You should have received a copy of the GNU Lesser General Public License
+You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
