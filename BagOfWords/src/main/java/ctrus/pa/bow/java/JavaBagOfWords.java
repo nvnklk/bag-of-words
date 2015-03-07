@@ -19,21 +19,18 @@
 
 package ctrus.pa.bow.java;
 
-import org.eclipse.jdt.core.dom.CompilationUnit;
-
 import java.io.File;
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Collection;
-import java.util.Map;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
-import org.eclipse.jdt.core.dom.AST;
-import org.eclipse.jdt.core.dom.ASTParser;
+import org.apache.commons.lang3.ArrayUtils;
 
 import ctrus.pa.bow.core.DefaultBagOfWords;
 import ctrus.pa.bow.core.DefaultOptions;
+import ctrus.pa.bow.java.token.ClassTokens;
+import ctrus.pa.bow.java.token.MethodTokens;
 import ctrus.pa.bow.term.FilterFactory;
 import ctrus.pa.bow.term.TermFilteration;
 import ctrus.pa.bow.term.TermTransformation;
@@ -69,22 +66,6 @@ public class JavaBagOfWords extends DefaultBagOfWords {
 		termTransformation.addTransfomer(transformerFactory.createLengthTransformer());
 	}
 	
-	private void wrapUpTermCollection(Tokenizer cv, String fileName) throws IOException {
-		// Add package name and class name to the above
-		// tokens collected from all methods
-		addTerm(cv.getPackageName());
-		for(String t : cv.getClassDeclartions())
-			addTerm(t);
-				
-		// Add tokens found outside method such as from comments and class variables
-		for(String cTokens : cv.getClassTokens()) {
-			addTerms(cTokens.split("\\p{Space}"));
-		}
-	
-		writeToOutput(fileName);
-		reset();		
-	}
-
 	@Override
 	public void create() {
 		try {
@@ -92,40 +73,45 @@ public class JavaBagOfWords extends DefaultBagOfWords {
 			boolean methodChunk = _options.hasOption(JavaBOWOptions.METHOD_CHUNKING);
 			
 			Collection<File> srcfiles = getSourceDocuments("*.java");			
-			ASTParser javaParser = ASTParser.newParser(AST.JLS3);
-			javaParser.setKind(ASTParser.K_COMPILATION_UNIT);
+			JavaFileTokenizer jTokenizer = new JavaFileTokenizer();
 			
 			int totalFiles = srcfiles.size();
 			int currentFile = 0;
 			CtrusHelper.printToConsole("Total files - " + srcfiles.size());			
 
-			for(File srcFile : srcfiles) {
-								
+			for(File srcFile : srcfiles) {								
 				// Parse the Java source file using a Off-the-shelf Java Parser
-				String javaSourceText = FileUtils.readFileToString(srcFile); 
-				javaParser.setSource(javaSourceText.toCharArray());				
-				final CompilationUnit cu = (CompilationUnit) javaParser.createAST(null);
-				Tokenizer cv = new Tokenizer(cu, javaSourceText); 
-				cu.accept(cv);
-				cv.processComments();	// This has to be called after visiting all the methods for tokens
-				
-				Map<String, List<String>> terms = cv.getTokens();
-				
-				for(String method : terms.keySet()) {
-					List<String> methodTerms = terms.get(method);
-											
-					for(String term : methodTerms) {
-						addTerms(term.split("\\p{Space}"));
+				List<String> javaSourceTextLines = FileUtils.readLines(srcFile);
+				jTokenizer.tokenize(javaSourceTextLines);
+				for(ClassTokens c : jTokenizer.getClassTokens()) {					
+					String[] tokens = c.getTokens();
+					for(String mId : c.getMethodIdentifiers()) {
+						MethodTokens m = c.getMethodTokens(mId);						
+						if(methodChunk) {
+							addTerms(ArrayUtils.addAll(m.getTokens(), tokens));
+							// TBD:: Add document to file name mapping here
+							String fileName = CtrusHelper.uniqueId(m.getIdentifier()).toString();
+							writeToOutput(fileName);
+							reset();  // Reset so that next method tokens can 
+									  // be added as new document 
+						} else {
+							tokens = ArrayUtils.addAll(m.getTokens(), tokens);
+						}							
 					}
 					
-					if(methodChunk) {
-						wrapUpTermCollection(cv, method + "_" + srcFile.getName());						
+					if(!methodChunk) {
+						// Add all collected tokens as terms
+						addTerms(tokens);
+						
+						// TBD:: Add document to file name mapping here
+						String fileName = CtrusHelper.uniqueId(c.getIdentifier()).toString();
+						writeToOutput(fileName);
+						reset(); // Reset so that next class tokens can 
+						  		 // be added as new document
 					}
+						
 				}
 				
-				if(!methodChunk) {
-					wrapUpTermCollection(cv, srcFile.getName());
-				}
 				
 				currentFile++;						// Update the counter
 				// print progress
