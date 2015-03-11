@@ -56,7 +56,7 @@ public class JavaBagOfWords extends DefaultBagOfWords {
 		_stopWordFilterForComments = filterFactory.createStopFilterForComments();
 		_stopWordFilterForComments.setEnabled(false);
 		filterations.addFilter(_stopWordFilterForComments);
-		filterations.addFilter(filterFactory.createNumbericFilter());
+		filterations.addFilter(filterFactory.createNumericFilter());
 		filterations.addFilter(filterFactory.createLengthFilter());
 		
 				

@@ -48,7 +48,7 @@ public class EnBagOfWords extends DefaultBagOfWords {
 		// Add all required filters
 		FilterFactory filterFactory = EnWordFilterFactory.newInstance(_options); 
 		filterations.addFilter(filterFactory.createStopFilter());
-		filterations.addFilter(filterFactory.createNumbericFilter());
+		filterations.addFilter(filterFactory.createNumericFilter());
 		filterations.addFilter(filterFactory.createLengthFilter());
 		
 		// Create transformer

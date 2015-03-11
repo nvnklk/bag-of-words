@@ -58,7 +58,7 @@ public abstract class BaseFilterFactory implements FilterFactory {
 		return lengthFilter;	
 	}
 	
-	public TermFilter createNumbericFilter() {
+	public TermFilter createNumericFilter() {
 		NumericFilter numericFilter = new NumericFilter();
 		// check if vocabulary should contain numeric terms, 
 		// default is to skip numeric terms

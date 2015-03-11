@@ -25,5 +25,5 @@ public interface FilterFactory {
 	
 	public TermFilter createLengthFilter();
 	
-	public TermFilter createNumbericFilter();
+	public TermFilter createNumericFilter();
 }
