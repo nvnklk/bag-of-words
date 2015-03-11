@@ -25,6 +25,7 @@ import org.apache.commons.cli.MissingOptionException;
 
 import ctrus.pa.bow.core.BOWOptions;
 import ctrus.pa.bow.core.DefaultOptions;
+import ctrus.pa.bow.en.EnStopFilter;
 import ctrus.pa.bow.term.FilterFactory;
 import ctrus.pa.bow.term.TermFilter;
 import ctrus.pa.bow.term.filter.BaseFilterFactory;
@@ -49,10 +50,12 @@ public class JavaFilterFactory extends BaseFilterFactory {
 		String stopFileName;
 		try {
 			stopFileName = getOption(DefaultOptions.STOP_WORDS_FILE);
+			CtrusHelper.printToConsole("Stop-word file - " + stopFileName);
+			return new StopFilter(new File(stopFileName));			
 		} catch (MissingOptionException ex) {
-			stopFileName = this.getClass().getResource("sw-java.lst").getFile();
-		}		
-		CtrusHelper.printToConsole("Stop-word file - " + stopFileName);
-		return new StopFilter(new File(stopFileName));
+			String stopWordsFile = "/ctrus/pa/bow/java/sw-java.lst";
+			CtrusHelper.printToConsole("Loading default Stop-word file - " + stopWordsFile);
+			return new StopFilter(getClass().getResourceAsStream(stopWordsFile));
+		}						
 	}
 }

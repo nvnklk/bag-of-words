@@ -20,6 +20,7 @@
 package ctrus.pa.bow.en;
 
 import java.io.File;
+import java.io.InputStream;
 
 import ctrus.pa.bow.term.filter.StopFilter;
 import ctrus.pa.util.CtrusHelper;
@@ -34,7 +35,12 @@ public class EnStopFilter extends StopFilter {
 		fillStopWordsFromFile(stopWordsFile);		
 	}
 	
+	private EnStopFilter(InputStream stopFileStream) {
+		fillStopWordsFromFile(stopFileStream);		
+	}	
+	
 	public static StopFilter newInstance(File stopWordsFile) {
+		CtrusHelper.printToConsole("Loading default Stop-word file - " + stopWordsFile);
 		return new EnStopFilter(stopWordsFile); 
 	}
 	
@@ -48,10 +54,9 @@ public class EnStopFilter extends StopFilter {
 			case SMALL : 
 			default : stopWordFileString = "sw-en-small.lst"; break;
 		}
-		
-		String stopWordFile = EnStopFilter.class.getResource(stopWordFileString).getFile();
-		CtrusHelper.printToConsole("Stop-word file - " + stopWordFile);
-		return new EnStopFilter(new File(stopWordFile));
+		stopWordFileString = "/ctrus/pa/bow/java/" + stopWordFileString;
+		CtrusHelper.printToConsole("Loading default Stop-word file - " + stopWordFileString);
+		return new EnStopFilter(EnStopFilter.class.getResourceAsStream(stopWordFileString));			
 	}
 
 	

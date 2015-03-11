@@ -23,6 +23,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashSet;
 
@@ -37,22 +38,39 @@ public class StopFilter extends BaseFilter {
 	public StopFilter(File stopFile) {
 		fillStopWordsFromFile(stopFile);
 	}
-		
-	protected void fillStopWordsFromFile(File stopFile) {		
+	
+	public StopFilter(InputStream stopFileStream) {
+		fillStopWordsFromFile(stopFileStream);
+	}
+	
+	protected void fillStopWordsFromFile(File stopFile) {
+		try {
+			FileInputStream fis = new FileInputStream(stopFile);
+			fillStopWordsFromFile(fis);
+		} catch (IOException ex) {
+			CtrusHelper.printToConsole("Warning! Could not find stop words file...");
+		}		
+	}
+	
+	protected void fillStopWordsFromFile(InputStream fis) {		
 		try {
 			// Read stop word file and prepare stop word list
-			FileInputStream fis = new FileInputStream(stopFile);
+			
 			BufferedReader br = new BufferedReader(new InputStreamReader(fis));
 		
 			String line = null;
+			int count = 0;
 			while ((line = br.readLine()) != null) {
-				if(!line.startsWith("#") && !line.isEmpty())
+				if(!line.startsWith("#") && !line.isEmpty()) {
 					add(line);
+					count++;
+				}
 			}
+			CtrusHelper.printToConsole("Number of stop words loaded - " + count);
 			br.close();
 			fis.close();
 		} catch(IOException ex) {
-			CtrusHelper.printToConsole("Warning! Could not read stop words file...");
+			CtrusHelper.printToConsole("Warning! error in reading stop words file...");
 		}
 	}
 	
