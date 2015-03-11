@@ -31,6 +31,7 @@ public abstract class IdentifierTokens implements ASTTokens {
 	
 	private String		 _identifier 	 = null;
 	private List<String> _tokens 	 	 = new ArrayList<String>();
+	private List<String> _commentTokens  = new ArrayList<String>();
 	
 	protected IdentifiersPosition _positionVisitor = null;
 	
@@ -66,17 +67,32 @@ public abstract class IdentifierTokens implements ASTTokens {
 	public String[] getTokens() {
 		return _tokens.toArray(new String[0]);
 	}
+	
+	@Override
+	public String[] getCommentTokens() {
+		return _commentTokens.toArray(new String[0]);
+	}	
 
 	@Override
-	public void addToken(String tokens) {
+	public void addToken(String token) {
+		_addToken(token, _tokens);
+	}
+	
+	@Override
+	public void addCommentToken(String token) {
+		_addToken(token, _commentTokens);
+	}	
+	
+	private void _addToken(String tokens, List<String> container) {
 		// Clean tokens of any punctuation and trim the ends
 		tokens = tokens.replaceAll(CLEAN_PUNC_REGEX, " ").trim(); 
 		
 		// Split the space delimited tokens to add to the list 
 		for (String token : tokens.split(SPACE_REGX)) { 
     		if (token.equals("")) continue;
-    		else _tokens.add(token);		// multiplicity of a token to be maintained
+    		else container.add(token);		// multiplicity of a token to be maintained
 		}
+		
 	}
 
 	public abstract void addTokens(ASTNode node);

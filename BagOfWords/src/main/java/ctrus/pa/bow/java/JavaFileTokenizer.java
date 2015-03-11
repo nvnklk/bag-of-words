@@ -1,4 +1,3 @@
-package ctrus.pa.bow.java;
 /*
  * Copyright (C) 2015 Naveen Kulkarni.
  *
@@ -17,6 +16,8 @@ package ctrus.pa.bow.java;
  * You should have received a copy of the GNU General Public License along 
  * with Bag of Words program. If not, see <http://www.gnu.org/licenses/>.
  */
+
+package ctrus.pa.bow.java;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -87,7 +88,7 @@ public class JavaFileTokenizer extends ASTVisitor {
 				String identifierOfComment = _positionObserver.getIdentifierForPosition(start, end); 				
 				String commentText = sourceText.substring(start, end).replaceAll("[\\t\\n\\r]"," ");
 				IdentifierTokens it = getTokens(identifierOfComment);
-				it.addToken(commentText);
+				it.addCommentToken(commentText);
 			}		
 		}
 		

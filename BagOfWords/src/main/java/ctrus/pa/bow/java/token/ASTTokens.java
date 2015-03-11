@@ -27,7 +27,11 @@ public interface ASTTokens {
 	
 	public String[] getTokens();
 	
+	public String[] getCommentTokens();
+	
 	public void addToken(String token);
+	
+	public void addCommentToken(String token);
 	
 	public void addTokens(ASTNode node);
 }

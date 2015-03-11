@@ -110,7 +110,7 @@ public class ClassTokens extends IdentifierTokens {
 		if(jd != null) {
 			List<TagElement> jDocComments = (List<TagElement>) jd.tags();
 	        for(TagElement jDocComment : jDocComments) {
-				addToken(jDocComment.toString());
+				addCommentToken(jDocComment.toString());
 	        } 
 		}
 	}

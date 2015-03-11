@@ -109,7 +109,7 @@ public class MethodTokens extends IdentifierTokens {
         if(!_ignoreComments && mth.getJavadoc() != null) {
 	        List<TagElement> jDocComments = (List<TagElement>) mth.getJavadoc().tags();
 	        for(TagElement jDocComment : jDocComments) {
-	        	addToken(jDocComment.toString());
+	        	addCommentToken(jDocComment.toString());
 	        }
         }			
 	}

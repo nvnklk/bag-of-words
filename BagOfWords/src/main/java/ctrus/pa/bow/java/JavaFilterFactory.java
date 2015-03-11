@@ -26,7 +26,7 @@ import org.apache.commons.cli.MissingOptionException;
 import ctrus.pa.bow.core.BOWOptions;
 import ctrus.pa.bow.core.DefaultOptions;
 import ctrus.pa.bow.en.EnStopFilter;
-import ctrus.pa.bow.term.FilterFactory;
+import ctrus.pa.bow.en.EnStopFilter.StopWordsSize;
 import ctrus.pa.bow.term.TermFilter;
 import ctrus.pa.bow.term.filter.BaseFilterFactory;
 import ctrus.pa.bow.term.filter.StopFilter;
@@ -38,7 +38,7 @@ public class JavaFilterFactory extends BaseFilterFactory {
 	
 	private JavaFilterFactory() {}
 
-	public static FilterFactory newInstance(BOWOptions options) {
+	public static JavaFilterFactory newInstance(BOWOptions options) {
 		if(_instance == null) {
 			_instance = new JavaFilterFactory();
 			_instance.setOptions(options);
@@ -57,5 +57,9 @@ public class JavaFilterFactory extends BaseFilterFactory {
 			CtrusHelper.printToConsole("Loading default Stop-word file - " + stopWordsFile);
 			return new StopFilter(getClass().getResourceAsStream(stopWordsFile));
 		}						
+	}
+	
+	public TermFilter createStopFilterForComments() {
+		return EnStopFilter.newInstance(StopWordsSize.SMALL);
 	}
 }

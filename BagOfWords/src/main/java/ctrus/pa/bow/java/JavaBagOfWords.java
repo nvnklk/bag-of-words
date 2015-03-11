@@ -32,13 +32,15 @@ import ctrus.pa.bow.core.DefaultOptions;
 import ctrus.pa.bow.core.Vocabulary;
 import ctrus.pa.bow.java.token.ClassTokens;
 import ctrus.pa.bow.java.token.MethodTokens;
-import ctrus.pa.bow.term.FilterFactory;
+import ctrus.pa.bow.term.TermFilter;
 import ctrus.pa.bow.term.TermFilteration;
 import ctrus.pa.bow.term.TermTransformation;
 import ctrus.pa.util.CtrusHelper;
 
 public class JavaBagOfWords extends DefaultBagOfWords {
 
+	TermFilter _stopWordFilterForComments = null;
+	
 	public JavaBagOfWords() {}
 	
 	protected void setup() {
@@ -47,8 +49,13 @@ public class JavaBagOfWords extends DefaultBagOfWords {
 		setFilterations(filterations);
 				
 		// Add all required filters
-		FilterFactory filterFactory = JavaFilterFactory.newInstance(_options); 
+		JavaFilterFactory filterFactory = JavaFilterFactory.newInstance(_options); 
 		filterations.addFilter(filterFactory.createStopFilter());
+		// create a comment stop word filter and get its reference. This filter is
+		// disabled by default and it enabled as required.
+		_stopWordFilterForComments = filterFactory.createStopFilterForComments();
+		_stopWordFilterForComments.setEnabled(false);
+		filterations.addFilter(_stopWordFilterForComments);
 		filterations.addFilter(filterFactory.createNumbericFilter());
 		filterations.addFilter(filterFactory.createLengthFilter());
 		
@@ -87,23 +94,33 @@ public class JavaBagOfWords extends DefaultBagOfWords {
 				// Parse the Java source file using a Off-the-shelf Java Parser
 				List<String> javaSourceTextLines = FileUtils.readLines(srcFile);
 				jTokenizer.tokenize(javaSourceTextLines);
-				for(ClassTokens c : jTokenizer.getClassTokens()) {					
-					String[] tokens = c.getTokens();
+				for(ClassTokens c : jTokenizer.getClassTokens()) {
+					String[] commentTokens = c.getCommentTokens();
+					String[] classTokens = c.getTokens();
 					for(String mId : c.getMethodIdentifiers()) {
 						MethodTokens m = c.getMethodTokens(mId);						
 						if(methodChunk) {
 							String docref = CtrusHelper.uniqueId(m.getIdentifier()).toString();
 							
-							// Add document to the vocabulary first before adding terms
+							// Add document to the vocabulary first before adding terms							
 							Vocabulary.getInstance().addDocument(docref, srcFile.getName());
 							
-							addTerms(ArrayUtils.addAll(m.getTokens(), tokens), docref);
-							// TBD:: Add document to file name mapping here							
+							addTerms(ArrayUtils.addAll(m.getTokens(), classTokens), docref);
+							
+							if(!ignoreComments) {
+								// Enable stop words filtering for comments
+								_stopWordFilterForComments.setEnabled(true);
+								addTerms(ArrayUtils.addAll(m.getCommentTokens(), commentTokens), docref);
+								_stopWordFilterForComments.setEnabled(false);
+							}
+							
+							// Write bow to the file
 							writeToOutput(docref);
 							reset();  // Reset so that next method tokens can 
 									  // be added as new document 
 						} else {
-							tokens = ArrayUtils.addAll(m.getTokens(), tokens);
+							classTokens = ArrayUtils.addAll(m.getTokens(), classTokens);
+							commentTokens = ArrayUtils.addAll(m.getCommentTokens(), commentTokens);
 						}							
 					}
 					
@@ -115,7 +132,13 @@ public class JavaBagOfWords extends DefaultBagOfWords {
 						Vocabulary.getInstance().addDocument(docref, srcFile.getName());
 						
 						// Add all collected tokens as terms
-						addTerms(tokens, docref);
+						addTerms(classTokens, docref);
+						
+						if(!ignoreComments) {
+							// Enable stop words filtering for comments
+							_stopWordFilterForComments.setEnabled(true);
+							addTerms(commentTokens, docref);
+						}
 						
 						writeToOutput(docref);
 						reset(); // Reset so that next class tokens can 
