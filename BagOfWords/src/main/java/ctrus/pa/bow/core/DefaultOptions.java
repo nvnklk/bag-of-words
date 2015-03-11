@@ -35,7 +35,7 @@ public class DefaultOptions extends BOWOptionsImpl {
 	public final static String OUTPUT_SINGLE_FILE 	= "outputSingleFile";
 	public final static String STOP_WORDS_FILE		= "stopWordsFile";
 	public final static String JARGONS_FILE			= "jargonsFile";
-	public final static String OUTPUT_DIR			= "ouputDir";
+	public final static String OUTPUT_DIR			= "outputDir";
 	public final static String TERM_CHUNK_CHARS		= "termChunkChars";
 	public final static String PRINT_VOCABULARY		= "printVocabulary";
 	public final static String HASH_TERMS			= "hashTerms";				
