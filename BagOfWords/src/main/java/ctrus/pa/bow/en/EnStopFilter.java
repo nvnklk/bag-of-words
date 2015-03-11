@@ -54,7 +54,7 @@ public class EnStopFilter extends StopFilter {
 			case SMALL : 
 			default : stopWordFileString = "sw-en-small.lst"; break;
 		}
-		stopWordFileString = "/ctrus/pa/bow/java/" + stopWordFileString;
+		stopWordFileString = "/ctrus/pa/bow/en/" + stopWordFileString;
 		CtrusHelper.printToConsole("Loading default Stop-word file - " + stopWordFileString);
 		return new EnStopFilter(EnStopFilter.class.getResourceAsStream(stopWordFileString));			
 	}

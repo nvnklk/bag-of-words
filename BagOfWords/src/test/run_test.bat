@@ -20,8 +20,8 @@ SET en_classpath=%bow%;%commons-cli%;%commons-io%;%commons-lang%;%mapdb%
 SET ja_classpath=%en_classpath%;%jdt-core%;%core-contenttype%;%core-jobs%;%core-res%;%core-runtime%;%equinox-common%;%equinox-pref%;%osgi%
 
 SET option1=-minWordLength 3 -useStemming -printVocabulary
-SET option2=%option1% -retainNum -methodChunking -splitCamelCase -hashTerms 4
-SET option3=-sourceDir ./data/en -ouputDir ./output -outputSingleFile en_bow.txt
+SET option2=%option1% -retainNum -methodChunking -caseSensitive
+SET option3=-sourceDir ./data/en -outputDir ./output -outputSingleFile en_bow.txt
 SET option4=-sourceDir ./data/java -outputDir ./output -outputSingleFile java_bow.txt
 
 IF [%1] == [help]	GOTO param_help
