@@ -59,8 +59,8 @@ public abstract class BOWOptionsImpl implements BOWOptions {
 		CommandLineParser p = new GnuParser(); 
 		try {
 			_parsedOptions = p.parse(_cliOptions, args, true);			
-		} catch(MissingOptionException ex) {
-			printHelp(new PrintWriter(System.out));
+		} catch(MissingOptionException ex) {			
+			printHelp(ex.getMessage(), new PrintWriter(System.out));
 			System.exit(1);
 		}
 		
@@ -101,11 +101,11 @@ public abstract class BOWOptionsImpl implements BOWOptions {
 		return hasOptionInternal(option, false);
 	}
 	
-	public void printHelp(PrintWriter pw) {
+	public void printHelp(String message, PrintWriter pw) {
 		int width = 100;
 		String cliHeader = toolDescription();
 		String cliFooter = "";
-		String cliSyntax = usageDescription();
+		//String cliSyntax = usageDescription();
 
 		for(int i=0; i<width; i++) {
 			cliHeader = cliHeader + "-";
@@ -113,8 +113,9 @@ public abstract class BOWOptionsImpl implements BOWOptions {
 		}
 
 		HelpFormatter hf = new HelpFormatter();
-		//hf.printHelp(usageDescription(), _cliOptions);
-		hf.printHelp(pw, width, cliSyntax, cliHeader, _cliOptions, 1, 2, cliFooter);
+		System.out.println("Message - " + message);
+		hf.printHelp(usageDescription(), _cliOptions);
+		//hf.printHelp(pw, width, cliSyntax, cliHeader, _cliOptions, 1, 2, cliFooter);
 	}
 	
 }

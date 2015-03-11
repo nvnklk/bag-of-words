@@ -106,7 +106,7 @@ public class EnBagOfWords extends DefaultBagOfWords {
 		BOWOptions opts = EnBOWOptions.getInstance();	
 		opts.parseCLI(args);		
 		if(opts.hasOption(DefaultOptions.PRINT_HELP)) {
-			opts.printHelp(new PrintWriter(System.out));
+			opts.printHelp("HELP", new PrintWriter(System.out));
 		} else {		
 			EnBagOfWords eBow = new EnBagOfWords();
 			eBow.setup(opts);

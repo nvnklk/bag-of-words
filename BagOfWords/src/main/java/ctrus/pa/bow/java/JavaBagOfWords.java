@@ -140,7 +140,7 @@ public class JavaBagOfWords extends DefaultBagOfWords {
 		JavaBOWOptions opts = JavaBOWOptions.Factory.getInstance();	
 		opts.parseCLI(args);
 		if(opts.hasOption(DefaultOptions.PRINT_HELP)) {
-			opts.printHelp(new PrintWriter(System.out));
+			opts.printHelp("HELP", new PrintWriter(System.out));
 		} else {					
 			JavaBagOfWords jBow = new JavaBagOfWords();
 			jBow.setup(opts);

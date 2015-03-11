@@ -41,5 +41,5 @@ public interface BOWOptions {
 	
 	public void parseCLI(String[] args) throws ParseException;
 	
-	public void printHelp(PrintWriter pw);
+	public void printHelp(String message, PrintWriter pw);
 }
