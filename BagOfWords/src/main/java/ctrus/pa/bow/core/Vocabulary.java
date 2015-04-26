@@ -38,6 +38,7 @@ public class Vocabulary implements Serializable {
 	
 	private static Vocabulary _instance = null;
 	private ConcurrentNavigableMap<String, TermMeta> _termVocabulary = null;
+	private ConcurrentNavigableMap<Long, TermFreq> _termFrequency = null;
 	private ConcurrentNavigableMap<String, DocMeta> _docVocabulary = null;
 		
 	private class DocMeta implements Serializable {
@@ -47,12 +48,19 @@ public class Vocabulary implements Serializable {
 		public String file_name = "";		
 	}
 	
+	private class TermFreq implements Serializable {
+	
+		private static final long serialVersionUID = 7583158016445398900L;
+		public long bucket = 0;
+		public long freq = 1;
+	}
+	
 	private class TermMeta implements Serializable {
 		
 		private static final long serialVersionUID = 5448836097415306367L;
 		public long term_id = 0;
 		public long doc_id = 0;
-		public int  freq = 1;		
+		public long  freq = 1;		
 	}
 
 	private Vocabulary() {}
@@ -67,6 +75,7 @@ public class Vocabulary implements Serializable {
 								 .make();
 		_termVocabulary = vocabularyDB.getTreeMap("TERM_VOCABULARY");
 		_docVocabulary = vocabularyDB.getTreeMap("DOC_VOCABULARY");
+		_termFrequency = vocabularyDB.getTreeMap("TERM_FREQUENCY");
 	}
 	
 	public void addTerm(String term, String doc) {
@@ -106,9 +115,26 @@ public class Vocabulary implements Serializable {
 		IOUtils.write("TERM_ID,TERM,DOC_ID,FREQ \n", out);		
 		for(String term : _termVocabulary.keySet()) {
 			TermMeta t = _termVocabulary.get(term);
+			// Add the term frequency
+			if(_termFrequency.containsKey(t.freq)) {
+				TermFreq tfreq = _termFrequency.get(t.freq);	
+				tfreq.freq++;							
+			} else {
+				TermFreq tfq = new TermFreq();
+				tfq.bucket = t.freq;				
+				_termFrequency.put(t.freq, tfq);
+			}
 			IOUtils.write(t.term_id + "," + term + "," + t.doc_id + "," + t.freq + "\n", out);
-		}
+		}			
 	}
+	
+	public final void writeTermFrequencyTo(OutputStream out) throws IOException {
+		IOUtils.write("BUCKET,FREQ\n", out);		
+		for(Long bucket : _termFrequency.keySet()) {
+			TermFreq tfq = _termFrequency.get(bucket);
+			IOUtils.write(tfq.bucket + "," + tfq.freq + "\n", out);
+		}			
+	}	
 	
 	public static Vocabulary getInstance() {
 		if(_instance == null) {

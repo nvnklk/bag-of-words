@@ -19,10 +19,15 @@
 
 package ctrus.pa.bow.java;
 
+import org.apache.commons.cli.MissingOptionException;
+
 import ctrus.pa.bow.core.BOWOptions;
+import ctrus.pa.bow.core.DefaultOptions;
 import ctrus.pa.bow.term.TermTransformer;
 import ctrus.pa.bow.term.transformation.BaseTransformerFactory;
-import ctrus.pa.bow.term.transformation.DummyStemmer;
+import ctrus.pa.party3.bow.stem.EnWordStemmer;
+import ctrus.pa.party3.bow.stem.EnWordStemmer.EnWordStemmerAlgo;
+import ctrus.pa.util.CtrusHelper;
 
 public class JavaTransformerFactoryImpl extends BaseTransformerFactory implements JavaTransformerFactory { 
 
@@ -39,7 +44,33 @@ public class JavaTransformerFactoryImpl extends BaseTransformerFactory implement
 	}
 	
 	public TermTransformer createStemmingTransformer() {
-		return new DummyStemmer();
+		EnWordStemmerAlgo stemAlgo = null;
+		try{
+			String algo = getOption(DefaultOptions.STEMMING_ALGO);				
+			switch(algo) {
+				case "porter"   : stemAlgo = EnWordStemmerAlgo.PORTER; break;									 
+				case "snowball" : stemAlgo = EnWordStemmerAlgo.SNOWBALL; break;
+				case "paice" 	: stemAlgo = EnWordStemmerAlgo.PAICE; break;
+				case "lovins" 	: stemAlgo = EnWordStemmerAlgo.LOVINS; break;
+				case "kstem" 	: stemAlgo = EnWordStemmerAlgo.KSTEM; break;
+				case "mstem" 	: stemAlgo = EnWordStemmerAlgo.MSTEM; break;
+				default         : stemAlgo = EnWordStemmerAlgo.PORTER;
+			}			
+		} catch(MissingOptionException ex) {
+			// Default stemming is 
+			stemAlgo = EnWordStemmerAlgo.PORTER;
+		}
+		
+		TermTransformer st = EnWordStemmer.getStemmer(stemAlgo);
+		
+		if(!hasOption(JavaBOWOptions.NO_STEMMING)){
+			st.setEnabled(false);
+			CtrusHelper.printToConsole("No Stemming on the terms...");
+		}
+		else {
+			CtrusHelper.printToConsole("Stemming used - " + stemAlgo);
+		}
+		return st;
 	}
 
 	public TermTransformer createCamelcaseTransformer() {

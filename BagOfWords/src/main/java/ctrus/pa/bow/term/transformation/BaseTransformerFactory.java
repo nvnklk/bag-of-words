@@ -27,6 +27,7 @@ import ctrus.pa.bow.core.BOWOptions;
 import ctrus.pa.bow.core.DefaultOptions;
 import ctrus.pa.bow.term.TermTransformer;
 import ctrus.pa.bow.term.TransformerFactory;
+import ctrus.pa.util.CtrusHelper;
 
 public abstract class BaseTransformerFactory implements TransformerFactory {
 	
@@ -45,13 +46,26 @@ public abstract class BaseTransformerFactory implements TransformerFactory {
 	}
 		
 	public TermTransformer createSanityTransformer() {
-		return new SanityTransformer();
+		SanityTransformer st = new SanityTransformer();
+		if(_options.hasOption(DefaultOptions.IGNORE_SPECIAL_CHARS)) {
+			String ignoreSplChars;
+			try {
+				ignoreSplChars = _options.getOption(DefaultOptions.IGNORE_SPECIAL_CHARS);
+				CtrusHelper.printToConsole("Special characters retained - " + ignoreSplChars);
+				for(char c : ignoreSplChars.toCharArray())
+					st.escapeChar(c);			
+			} catch (MissingOptionException e) {
+				CtrusHelper.printToConsole("Warning: Could not read special characters to retain...");
+			}
+		}
+		return st;
 	}
 	
 	public TermTransformer createChunkTransformer() {
 		ChunkTransformer chunckTransformer = new ChunkTransformer();
 		try {
 			String chunckChars = _options.getOption(DefaultOptions.TERM_CHUNK_CHARS);
+			CtrusHelper.printToConsole("Additional chars for term chuncking - " + chunckChars);
 			for(char c : chunckChars.toCharArray())
 				chunckTransformer.addChunckChar(c);
 		} catch (MissingOptionException e) {

@@ -4,7 +4,7 @@
   <groupId>ctrus.pa</groupId>
   <artifactId>BagOfWords</artifactId>
   <packaging>jar</packaging>
-  <version>0.1-SNAPSHOT</version>
+  <version>0.1b</version>
   <name>BagOfWords</name>
   <url>http://maven.apache.org</url>  
   <dependencies>

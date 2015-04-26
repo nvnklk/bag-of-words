@@ -71,6 +71,7 @@ public class JavaBagOfWords extends DefaultBagOfWords {
 		termTransformation.addTransfomer(transformerFactory.createSanityTransformer());		
 		termTransformation.addTransfomer(transformerFactory.createJargonTransformer());
 		termTransformation.addTransfomer(transformerFactory.createLowercaseTransformer());
+		termTransformation.addTransfomer(transformerFactory.createStemmingTransformer());
 		termTransformation.addTransfomer(transformerFactory.createLengthTransformer());
 	}
 	

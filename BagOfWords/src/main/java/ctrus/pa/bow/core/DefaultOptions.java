@@ -38,7 +38,8 @@ public class DefaultOptions extends BOWOptionsImpl {
 	public final static String OUTPUT_DIR			= "outputDir";
 	public final static String TERM_CHUNK_CHARS		= "termChunkChars";
 	public final static String PRINT_VOCABULARY		= "printVocabulary";
-	public final static String HASH_TERMS			= "hashTerms";				
+	public final static String HASH_TERMS			= "hashTerms";
+	public final static String IGNORE_SPECIAL_CHARS	= "ignoreSpecialChars";
 	
 	public final static String DEBUG_LOG			= "debugLog";			
 	public final static String PRINT_HELP			= "help";
@@ -133,6 +134,13 @@ public class DefaultOptions extends BOWOptionsImpl {
 				.withDescription("Hash the term if its length exceeds <arg>")
 				.create(HASH_TERMS);
 		addOption(o16);
+		
+		Option o17 = OptionBuilder.hasArg(true)
+				.withDescription("Special characters to ignore eg. _$")
+				.create(IGNORE_SPECIAL_CHARS);
+		addOption(o17);
+		
+		
 		
 	}
 

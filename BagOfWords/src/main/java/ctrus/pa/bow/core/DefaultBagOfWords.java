@@ -38,7 +38,8 @@ public abstract class DefaultBagOfWords extends UnWeightedBagOfWords {
 		
 	protected static final String DEFAULT_OUTPUT_DIR 		= "output";
 	protected static final String DEFAULT_OUTPUT_FILE 		= "bow.txt";
-	protected static final String DEFAULT_TERM_VOCAB_FILE 	= "term.txt";
+	protected static final String DEFAULT_TERM_VOCAB_FILE 	= "term_vocab.txt";
+	protected static final String DEFAULT_TERM_FREQ_FILE 	= "term_freq.txt";
 	protected static final String DEFAULT_DOC_VOCAB_FILE 	= "doc.txt";
 	
 	protected BOWOptions 		_options 		= null;
@@ -128,13 +129,25 @@ public abstract class DefaultBagOfWords extends UnWeightedBagOfWords {
 				outputFileString = "." + File.separator;
 			}
 			String outputFileString1 = outputFileString + File.separator + DEFAULT_TERM_VOCAB_FILE;
-			String outputFileString2 = outputFileString + File.separator + DEFAULT_DOC_VOCAB_FILE;
+			String outputFileString2 = outputFileString + File.separator + DEFAULT_TERM_FREQ_FILE;
+			String outputFileString3 = outputFileString + File.separator + DEFAULT_DOC_VOCAB_FILE;
+			
+			CtrusHelper.printToConsole("Writing vocabulary to " + outputFileString + " ...");
 			
 			// Write terms
-			Vocabulary.getInstance().writeTermVocabularyTo(FileUtils.openOutputStream(new File(outputFileString1)));
+			FileOutputStream fos1 = FileUtils.openOutputStream(new File(outputFileString1));
+			Vocabulary.getInstance().writeTermVocabularyTo(fos1);
+			fos1.close();
+			
+			// Write frequency
+			FileOutputStream fos2 = FileUtils.openOutputStream(new File(outputFileString2));
+			Vocabulary.getInstance().writeTermFrequencyTo(fos2);
+			fos2.close();
 			
 			// Write doc
-			Vocabulary.getInstance().writeDocVocabularyTo(FileUtils.openOutputStream(new File(outputFileString2)));
+			FileOutputStream fos3 = FileUtils.openOutputStream(new File(outputFileString3));
+			Vocabulary.getInstance().writeDocVocabularyTo(fos3);
+			fos3.close();
 		}
 	}
 }

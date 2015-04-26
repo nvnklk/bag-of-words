@@ -71,7 +71,7 @@ public class EnBagOfWords extends DefaultBagOfWords {
 			Collection<File> srcfiles = getSourceDocuments("*");
 			int totalFiles = srcfiles.size();
 			int currentFile = 0;
-			CtrusHelper.printToConsole("Total files - " + srcfiles.size());
+			CtrusHelper.printToConsole("Number of documents to process - " + srcfiles.size());
 			
 			for(File srcFile : srcfiles) {
 								

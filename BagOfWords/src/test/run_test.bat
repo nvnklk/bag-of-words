@@ -2,7 +2,7 @@
 
 SET m2repo=c:\Users\%USERNAME%\.m2\repository
 
-SET bow=../../target/BagOfWords-0.1-SNAPSHOT.jar
+SET bow=../../target/BagOfWords-0.1b.jar
 SET commons-cli=%m2repo%\commons-cli\commons-cli\1.2\commons-cli-1.2.jar
 SET commons-io=%m2repo%\commons-io\commons-io\2.4\commons-io-2.4.jar
 SET commons-lang=%m2repo%\org\apache\commons\commons-lang3\3.3.2\commons-lang3-3.3.2.jar

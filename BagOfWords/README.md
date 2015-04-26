@@ -77,7 +77,8 @@ specific extensions.
  	-sourceDir <arg>          Directory containing input documents
  	-stemAlgo <arg>           Stemming algorithm to use
  	-stopWordsFile <arg>      Stop words file
- 	-termChunkChars <arg>     Chunk characters eg. ;,_:
+ 	-termChunkChars <arg>     Chunk characters eg. ";,_:"
+ 	-ignoreSpecialChars <arg> Special characters to ignore eg. "_$" 
  	-useStemming              Stem the words extracted
  	-useWeight                Use weights for words
  	-printVocabulary		  Print the vocabulary to a file 'voc.txt'	
@@ -89,7 +90,8 @@ Additional options for JavaBagOfWords
 	-retainCompoundWords	  Retain compound terms (eg.camel cased) in the model
 	-methodChunking 		  Create BOW model per method, default is per class
 	-ignoreComments		  	  Ignore comments in source files
-	-considerCopyright		  Consider terms from copyright notice in source files	
+	-considerCopyright		  Consider terms from copyright notice in source files
+	-noStemming				  Do not do stemming of terms		
 
 Extending
 ---------

@@ -31,6 +31,7 @@ public class JavaBOWOptions extends DefaultOptions {
 //	public final static String CONSIDER_COPYRIGHT		= "considerCopyright";
 //	public final static String RETAIN_COMPOUND_WORDS	= "retainCompoundWords";	
 	public final static String IGNORE_COMMENTS			= "ignoreComments";
+	public final static String NO_STEMMING				= "noStemming";
 		
 	// Closed constructor
 	private JavaBOWOptions() {
@@ -66,6 +67,10 @@ public class JavaBOWOptions extends DefaultOptions {
 				.create(RETAIN_COMPOUND_WORDS);
 		addOption(o7);		
 */
+		Option o8 =  OptionBuilder.hasArg(false)
+				.withDescription("Do not do stemming of terms")
+				.create(NO_STEMMING);
+		addOption(o8);	
 	}
 
 	@Override
