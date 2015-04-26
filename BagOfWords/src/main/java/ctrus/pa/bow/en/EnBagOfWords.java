@@ -67,38 +67,56 @@ public class EnBagOfWords extends DefaultBagOfWords {
 	
 	@Override
 	public void create() {
-		try {		
+		try {				
 			Collection<File> srcfiles = getSourceDocuments("*");
 			int totalFiles = srcfiles.size();
 			int currentFile = 0;
-			CtrusHelper.printToConsole("Number of documents to process - " + srcfiles.size());
+			CtrusHelper.printToConsole("Number of files to process - " + srcfiles.size());
 			
 			for(File srcFile : srcfiles) {
-								
-				// Add document to file name mapping
-				String fileName = srcFile.getName();
-				String docref = CtrusHelper.uniqueId(fileName).toString();
+				
+				// Read each line
+				Iterator<String> lines = FileUtils.lineIterator(srcFile);
+				
+				if(_options.hasOption(DefaultOptions.DOCUMENT_PER_LINE)) {
+					while(lines.hasNext()) {					
+						String line = lines.next();
+						String[] docAndContent = line.split("=");
+						if(docAndContent.length > 1 && !docAndContent[1].isEmpty()){
+							String docref = CtrusHelper.uniqueId(docAndContent[0]).toString();
+							// Add document to the vocabulary first before adding terms
+							Vocabulary.getInstance().addDocument(docref, docAndContent[0]);
+						
+							addTerms(docAndContent[1].split("\\p{Space}"), docref);
+							writeToOutput(docref);
+							reset();
+						}
+					}
+				} else {
+					// Add document to file name mapping
+					String fileName = srcFile.getName();
+					String docref = CtrusHelper.uniqueId(fileName).toString();
 
-				// Add document to the vocabulary first before adding terms
-				Vocabulary.getInstance().addDocument(docref, fileName);
+					// Add document to the vocabulary first before adding terms
+					Vocabulary.getInstance().addDocument(docref, fileName);
+					
+					while(lines.hasNext()) {					
+						String line = lines.next();
+						addTerms(line.split("\\p{Space}"), docref);					
+					}
+					
+					writeToOutput(docref);	// Write BOW to output file							
+					reset();				// Reusing BOW, make sure to reset
 
-				Iterator<String> lines = FileUtils.lineIterator(srcFile); 				
-				while(lines.hasNext()) {					
-					String line = lines.next();
-					addTerms(line.split("\\p{Space}"), docref);					
 				}
 				
-				writeToOutput(docref);	// Write BOW to output file							
-				reset();				// Reusing BOW, make sure to reset
-				
-				currentFile++;						// Update the counter
-				// print progress
+				// Update the counter and print progress
+				currentFile++;
 				CtrusHelper.progressMonitor("Progress - ", currentFile, totalFiles);
 			}
 		} catch (Exception e) {			
 			e.printStackTrace();
-		}		
-		
+		}				
 	}
 	
 	public static void main(String[] args) throws Exception {

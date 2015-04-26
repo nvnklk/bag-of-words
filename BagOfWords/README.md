@@ -75,6 +75,7 @@ specific extensions.
  	-replaceJargons           Replace jargon words with full words
  	-retainNum                Retain the numerals
  	-sourceDir <arg>          Directory containing input documents
+ 	-documentsPerLine         Files contain documents one per line
  	-stemAlgo <arg>           Stemming algorithm to use
  	-stopWordsFile <arg>      Stop words file
  	-termChunkChars <arg>     Chunk characters eg. ";,_:"

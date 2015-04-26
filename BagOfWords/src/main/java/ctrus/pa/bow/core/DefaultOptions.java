@@ -32,6 +32,7 @@ public class DefaultOptions extends BOWOptionsImpl {
 	public final static String MIN_WORD_LENGTH 		= "minWordLength";	
 	public final static String STEMMING_ALGO 		= "stemAlgo";	
 	public final static String SOURCE_DIR 			= "sourceDir";
+	public final static String DOCUMENT_PER_LINE 	= "documentsPerLine";
 	public final static String OUTPUT_SINGLE_FILE 	= "outputSingleFile";
 	public final static String STOP_WORDS_FILE		= "stopWordsFile";
 	public final static String JARGONS_FILE			= "jargonsFile";
@@ -140,6 +141,10 @@ public class DefaultOptions extends BOWOptionsImpl {
 				.create(IGNORE_SPECIAL_CHARS);
 		addOption(o17);
 		
+		Option o18 = OptionBuilder.hasArg(false)
+				.withDescription("Files contain documents one per line")
+				.create(DOCUMENT_PER_LINE);
+		addOption(o18);
 		
 		
 	}
