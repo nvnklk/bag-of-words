@@ -41,6 +41,8 @@ public class DefaultOptions extends BOWOptionsImpl {
 	public final static String PRINT_VOCABULARY		= "printVocabulary";
 	public final static String HASH_TERMS			= "hashTerms";
 	public final static String IGNORE_SPECIAL_CHARS	= "ignoreSpecialChars";
+	public final static String NO_STEMMING			= "noStemming";
+	public final static String DOCUMENT_ID_DELIMITER= "documentIdDelimiter";
 	
 	public final static String DEBUG_LOG			= "debugLog";			
 	public final static String PRINT_HELP			= "help";
@@ -142,10 +144,19 @@ public class DefaultOptions extends BOWOptionsImpl {
 		addOption(o17);
 		
 		Option o18 = OptionBuilder.hasArg(false)
-				.withDescription("Files contain documents one per line")
+				.withDescription("Each line is a document in the input file(s)")
 				.create(DOCUMENT_PER_LINE);
 		addOption(o18);
-		
+
+		Option o19 = OptionBuilder.hasArg(false)
+				.withDescription("Do not stem the terms")
+				.create(NO_STEMMING);
+		addOption(o19);
+							  
+		Option o20 = OptionBuilder.hasArg(true)
+				.withDescription("Term left to delimiter is considered document Id, default is space")
+				.create(DOCUMENT_ID_DELIMITER);
+		addOption(o20);
 		
 	}
 

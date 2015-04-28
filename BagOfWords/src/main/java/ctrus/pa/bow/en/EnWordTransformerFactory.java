@@ -61,8 +61,15 @@ public class EnWordTransformerFactory extends BaseTransformerFactory {
 			// Default stemming is 
 			stemAlgo = EnWordStemmerAlgo.PORTER;
 		}
-		CtrusHelper.printToConsole("Stemming used - " + stemAlgo);
-		return EnWordStemmer.getStemmer(stemAlgo);
+		
+		TermTransformer stemmingTransformer = EnWordStemmer.getStemmer(stemAlgo);
+		if(hasOption(DefaultOptions.NO_STEMMING)) {
+			stemmingTransformer.setEnabled(false);
+			CtrusHelper.printToConsole("No stemming of terms...");
+		} else {
+			CtrusHelper.printToConsole("Stemming rules used - " + stemAlgo);
+		}
+		return stemmingTransformer;
 	}
 	
 }

@@ -65,34 +65,39 @@ are provided. The BOW model for English text documents can be created as below -
 The following are default options available. However, this may vary depending on
 specific extensions. 		   
 
- 	-caseSensitive            Retain the capital characters in the term
-	-debugLog                 Output debug log
- 	-help                     Print this help
- 	-minWordLength <arg>      Minimum word length to consider, default is 3
- 	-ouputDir <arg>           Directory to write output
- 	-outputSingleFile <arg>   Output single file with each line corresponding
-    	                       to an input source file
- 	-replaceJargons           Replace jargon words with full words
- 	-retainNum                Retain the numerals
- 	-sourceDir <arg>          Directory containing input documents
- 	-documentsPerLine         Files contain documents one per line
- 	-stemAlgo <arg>           Stemming algorithm to use
- 	-stopWordsFile <arg>      Stop words file
- 	-termChunkChars <arg>     Chunk characters eg. ";,_:"
- 	-ignoreSpecialChars <arg> Special characters to ignore eg. "_$" 
- 	-useStemming              Stem the words extracted
- 	-useWeight                Use weights for words
- 	-printVocabulary		  Print the vocabulary to a file 'voc.txt'	
- 	-hashTerms	<arg>		  Hash the term if its length exceeds <arg>
+ 	-caseSensitive            	Retain the capital characters in the term
+	-debugLog                 	Output debug log
+ 	-help                     	Print this help
+ 	-minWordLength <arg>      	Minimum word length to consider, default is 3
+ 	-ouputDir <arg>           	Directory to write output
+ 	-outputSingleFile <arg>   	Output single file with each line corresponding
+    	                       		to an input source file
+ 	-replaceJargons           	Replace jargon words with full words
+ 	-retainNum                	Retain the numerals
+ 	-sourceDir <arg>          	Directory containing input documents
+ 	-documentsPerLine         	Each line is a document in the input file(s)
+ 	-documentIdDelimiter <arg>	Term left to delimiter is considered document Id, 
+ 									default is space	
+ 	-stemAlgo <arg>           	Stemming algorithm to use
+ 	-stopWordsFile <arg>      	Stop words file
+ 	-termChunkChars <arg>     	Chunk characters eg. ";,_:"
+ 	-ignoreSpecialChars <arg> 	Special characters to ignore eg. "_$" 
+ 	-useStemming              	Stem the words extracted
+ 	-useWeight                	Use weights for words
+ 	-printVocabulary		  	Print the vocabulary to a file 'voc.txt'	
+ 	-hashTerms	<arg>		  	Hash the term if its length exceeds <arg>
+ 	-noStemming				  	Do not stem the terms
+
+Additional options for EnBagOfWords
+	-preserveDocId 		  	  	Retain the document ids from input
 
 Additional options for JavaBagOfWords
 	
-	-splitCamelCase 		  Split camel cased words
-	-retainCompoundWords	  Retain compound terms (eg.camel cased) in the model
-	-methodChunking 		  Create BOW model per method, default is per class
-	-ignoreComments		  	  Ignore comments in source files
-	-considerCopyright		  Consider terms from copyright notice in source files
-	-noStemming				  Do not do stemming of terms		
+	-splitCamelCase 		  	Split camel cased words
+	-retainCompoundWords	  	Retain compound terms (eg.camel cased) in the model
+	-methodChunking 		  	Create BOW model per method, default is per class
+	-ignoreComments		  	  	Ignore comments in source files
+	-considerCopyright		  	Consider terms from copyright notice in source files
 
 Extending
 ---------

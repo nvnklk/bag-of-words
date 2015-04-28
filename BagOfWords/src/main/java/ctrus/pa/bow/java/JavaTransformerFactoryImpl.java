@@ -65,10 +65,9 @@ public class JavaTransformerFactoryImpl extends BaseTransformerFactory implement
 		
 		if(!hasOption(JavaBOWOptions.NO_STEMMING)){
 			st.setEnabled(false);
-			CtrusHelper.printToConsole("No Stemming on the terms...");
-		}
-		else {
-			CtrusHelper.printToConsole("Stemming used - " + stemAlgo);
+			CtrusHelper.printToConsole("No stemming of terms...");
+		} else {
+			CtrusHelper.printToConsole("Stemming rules used - " + stemAlgo);
 		}
 		return st;
 	}

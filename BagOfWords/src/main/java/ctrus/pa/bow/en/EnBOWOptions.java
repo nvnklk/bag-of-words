@@ -19,6 +19,9 @@
 
 package ctrus.pa.bow.en;
 
+import org.apache.commons.cli.Option;
+import org.apache.commons.cli.OptionBuilder;
+
 import ctrus.pa.bow.core.BOWOptions;
 import ctrus.pa.bow.core.DefaultOptions;
 
@@ -26,6 +29,8 @@ public class EnBOWOptions extends DefaultOptions {
 
 	private static BOWOptions _instance = null;
 	
+	public final static String PRESERVE_DOC_ID			= "preserveDocId";
+		
 	public static BOWOptions getInstance() {			
 		// Lazy singleton
 		if(_instance == null) {
@@ -33,6 +38,16 @@ public class EnBOWOptions extends DefaultOptions {
 		}		
 		return _instance;
 	}
+	
+	@Override
+	@SuppressWarnings("static-access")
+	public void defineOptions() {
+		Option o1 = OptionBuilder.hasArg(false)
+				.withDescription("Retain the document ids from input")
+				.create(PRESERVE_DOC_ID);
+		addOption(o1);
+	}
+	
 
 	@Override
 	public String usageDescription() {

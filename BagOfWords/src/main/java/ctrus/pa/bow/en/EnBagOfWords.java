@@ -81,9 +81,17 @@ public class EnBagOfWords extends DefaultBagOfWords {
 				if(_options.hasOption(DefaultOptions.DOCUMENT_PER_LINE)) {
 					while(lines.hasNext()) {					
 						String line = lines.next();
-						String[] docAndContent = line.split("=");
+						String delimiter = " ";
+						if(_options.hasOption(DefaultOptions.DOCUMENT_ID_DELIMITER))
+							delimiter = _options.getOption(DefaultOptions.DOCUMENT_ID_DELIMITER);
+						String[] docAndContent = line.split(delimiter);
 						if(docAndContent.length > 1 && !docAndContent[1].isEmpty()){
-							String docref = CtrusHelper.uniqueId(docAndContent[0]).toString();
+							
+							String docref = "";
+							if(!_options.hasOption(EnBOWOptions.PRESERVE_DOC_ID))
+								docref = CtrusHelper.uniqueId(docAndContent[0]).toString();
+							else
+								docref = docAndContent[0];
 							// Add document to the vocabulary first before adding terms
 							Vocabulary.getInstance().addDocument(docref, docAndContent[0]);
 						
