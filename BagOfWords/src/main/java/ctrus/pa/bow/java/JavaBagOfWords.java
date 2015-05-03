@@ -101,10 +101,12 @@ public class JavaBagOfWords extends DefaultBagOfWords {
 					for(String mId : c.getMethodIdentifiers()) {
 						MethodTokens m = c.getMethodTokens(mId);						
 						if(methodChunk) {
-							String docref = CtrusHelper.uniqueId(m.getIdentifier()).toString();
+							String methodName = m.getIdentifier();
+							String docref = CtrusHelper.uniqueId(methodName).toString();
 							
-							// Add document to the vocabulary first before adding terms							
-							Vocabulary.getInstance().addDocument(docref, srcFile.getName());
+							// Add document to the vocabulary first before adding terms
+							String docName = srcFile.getName() + ":" + methodName;
+							Vocabulary.getInstance().addDocument(docref, docName);
 							
 							addTerms(ArrayUtils.addAll(m.getTokens(), classTokens), docref);
 							
