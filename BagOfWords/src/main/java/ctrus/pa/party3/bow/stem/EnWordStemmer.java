@@ -69,6 +69,15 @@ public class EnWordStemmer extends StemmingTransformer {
 	}
 	
 	public String stem(String word) {
+		// Possibility of having a compound word
+		StringBuffer sb = new StringBuffer();
+		for(String eachTerm : getTerms(word)) {
+			sb.append(_steamEachTerm(eachTerm)).append(" ");
+		}
+		return sb.toString().trim();
+	}
+	
+	private String _steamEachTerm(String word) {
 		String stemmedWord = null;
 		
 		switch(stemmerAlgo) {
@@ -94,7 +103,7 @@ public class EnWordStemmer extends StemmingTransformer {
 							throw new java.lang.UnsupportedOperationException("Not implemented yet!");
 		}
 		
-		return stemmedWord;
+		return stemmedWord;		
 	}
 	
 }

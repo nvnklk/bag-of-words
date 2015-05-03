@@ -49,10 +49,17 @@ public class JargonTransformer extends BaseTransformer {
 	}
 	
 	public String transform(String term) {
-		if(isJargon(term))
-			return _jargonsMap.get(term);
-		else 
-			return term;
+		// Possibility of having a compound word
+		StringBuffer sb = new StringBuffer();
+		for(String eachTerm : getTerms(term)) {
+			if(isJargon(eachTerm))
+				sb.append(_jargonsMap.get(eachTerm));
+			else
+				sb.append(eachTerm);
+			sb.append(" ");
+		}	
+		
+		return sb.toString().trim();
 	}
 		
 	public static class Factory {
@@ -66,18 +73,23 @@ public class JargonTransformer extends BaseTransformer {
 				BufferedReader br = new BufferedReader(new InputStreamReader(fis));
 			
 				String line = null;
+				int countJargons = 0;
 				while ((line = br.readLine()) != null) {
-					if(!line.startsWith("#")) {
+					line = line.trim(); // Remove white spaces
+					if(!line.startsWith("#") && line.length() > 0) {
 						StringTokenizer st = new StringTokenizer(line, " ");
 						_instance.add(st.nextToken(), st.nextToken());
 						st = null;
+						countJargons++;
 					}
 				}
+				CtrusHelper.printToConsole("Number of jargons loaded - " + countJargons);
 				br.close();
 			} catch(IOException ex) {
-				CtrusHelper.printToConsole("Warning! could not read stop word file, using default");
+				CtrusHelper.printToConsole("Warning! could not read jargon file, disabling jargon transformer...");
 				_instance = null;
-				return newInstance();
+				_instance = newInstance();
+				_instance.setEnabled(false);
 			}
 			
 			return _instance;

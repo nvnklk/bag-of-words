@@ -75,13 +75,15 @@ public abstract class BaseTransformerFactory implements TransformerFactory {
 	}
 	
 	public TermTransformer createJargonTransformer() {
-		JargonTransformer jargonTransformer = null;
+		JargonTransformer jargonTransformer = null;		
 		try{
-			File jargonsFile = new File(_options.getOption(DefaultOptions.JARGONS_FILE));
+			File jargonsFile = new File(_options.getOption(DefaultOptions.REPLACE_JARGONS));
 			jargonTransformer = JargonTransformer.Factory.newInstance(jargonsFile);
 		} catch(MissingOptionException ex) {
 			// Use default
 			jargonTransformer = JargonTransformer.Factory.newInstance();
+			// No jargon file provided, disable this transformer
+			jargonTransformer.setEnabled(false);
 		}
 		return jargonTransformer;		
 	}

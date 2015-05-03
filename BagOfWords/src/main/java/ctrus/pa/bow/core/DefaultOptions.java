@@ -35,7 +35,6 @@ public class DefaultOptions extends BOWOptionsImpl {
 	public final static String DOCUMENT_PER_LINE 	= "documentsPerLine";
 	public final static String OUTPUT_SINGLE_FILE 	= "outputSingleFile";
 	public final static String STOP_WORDS_FILE		= "stopWordsFile";
-	public final static String JARGONS_FILE			= "jargonsFile";
 	public final static String OUTPUT_DIR			= "outputDir";
 	public final static String TERM_CHUNK_CHARS		= "termChunkChars";
 	public final static String PRINT_VOCABULARY		= "printVocabulary";
@@ -108,7 +107,7 @@ public class DefaultOptions extends BOWOptionsImpl {
 				.create(OUTPUT_DIR);
 		addOption(o10);
 		
-		Option o11 =  OptionBuilder.hasArg(false)
+		Option o11 =  OptionBuilder.hasArg(true)
 				.withDescription("Replace jargon words with full words")
 				.create(REPLACE_JARGONS);
 		addOption(o11);

@@ -33,4 +33,8 @@ public abstract class BaseTransformer implements TermTransformer {
 		_enabled = enabled;
 	}
 	
+	protected String[] getTerms(String term) {
+		return term.split(" ");
+	}
+	
 }

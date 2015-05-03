@@ -72,7 +72,7 @@ specific extensions.
  	-ouputDir <arg>           	Directory to write output
  	-outputSingleFile <arg>   	Output single file with each line corresponding
     	                       		to an input source file
- 	-replaceJargons           	Replace jargon words with full words
+ 	-replaceJargons <arg>      	Replace jargon with full word provided in a file
  	-retainNum                	Retain the numerals
  	-sourceDir <arg>          	Directory containing input documents
  	-documentsPerLine         	Each line is a document in the input file(s)
@@ -82,7 +82,7 @@ specific extensions.
  	-stopWordsFile <arg>      	Stop words file
  	-termChunkChars <arg>     	Chunk characters eg. ";,_:"
  	-ignoreSpecialChars <arg> 	Special characters to ignore eg. "_$" 
- 	-useStemming              	Stem the words extracted
+ 	-noStemming              	Do not stem the terms
  	-useWeight                	Use weights for words
  	-printVocabulary		  	Print the vocabulary to a file 'voc.txt'	
  	-hashTerms	<arg>		  	Hash the term if its length exceeds <arg>

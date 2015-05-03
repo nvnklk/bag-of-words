@@ -63,7 +63,7 @@ public class JavaTransformerFactoryImpl extends BaseTransformerFactory implement
 		
 		TermTransformer st = EnWordStemmer.getStemmer(stemAlgo);
 		
-		if(!hasOption(JavaBOWOptions.NO_STEMMING)){
+		if(hasOption(JavaBOWOptions.NO_STEMMING)){
 			st.setEnabled(false);
 			CtrusHelper.printToConsole("No stemming of terms...");
 		} else {
