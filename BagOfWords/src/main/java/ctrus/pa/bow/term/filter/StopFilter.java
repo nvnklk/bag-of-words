@@ -78,7 +78,7 @@ public class StopFilter extends BaseFilter {
 		_stopWords.add(term.toLowerCase());
 	}
 	
-	public boolean filter(String term) {
+	public boolean filter(String term) {		
 		return _stopWords.contains(term.toLowerCase());
 	}
 	

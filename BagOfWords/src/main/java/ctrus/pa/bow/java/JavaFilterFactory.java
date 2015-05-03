@@ -50,7 +50,7 @@ public class JavaFilterFactory extends BaseFilterFactory {
 		String stopFileName;
 		try {
 			stopFileName = getOption(DefaultOptions.STOP_WORDS_FILE);
-			CtrusHelper.printToConsole("Stop-word file - " + stopFileName);
+			CtrusHelper.printToConsole("Loading stop-words file - " + stopFileName);
 			return new StopFilter(new File(stopFileName));			
 		} catch (MissingOptionException ex) {
 			String stopWordsFile = "/ctrus/pa/bow/java/sw-java.lst";
@@ -60,6 +60,7 @@ public class JavaFilterFactory extends BaseFilterFactory {
 	}
 	
 	public TermFilter createStopFilterForComments() {
+		CtrusHelper.printToConsole("Choosing stop-words for Java comments ...");
 		return EnStopFilter.newInstance(StopWordsSize.SMALL);
 	}
 }

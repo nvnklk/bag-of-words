@@ -34,13 +34,13 @@ import ctrus.pa.bow.term.TermTransformation;
 public abstract class UnWeightedBagOfWords implements BagOfWords {
 
 	private List<String> 		_terms 				= new ArrayList<String>();	
-	private TermTransformation 	_transfomrations 	= null;
+	private TermTransformation 	_transformations 	= null;
 	private TermFilteration 	_filterations 		= null;
 		
 	public abstract void create();
 	
 	protected final void setTransformations(TermTransformation transformations) {
-		_transfomrations = transformations;
+		_transformations = transformations;
 	}
 	
 	protected final void setFilterations(TermFilteration filterations) {
@@ -70,7 +70,7 @@ public abstract class UnWeightedBagOfWords implements BagOfWords {
 		if(_filterations.filter(term)) return;
 		
 		// Transform the term
-		String transformedTerm = _transfomrations.transform(term);
+		String transformedTerm = _transformations.transform(term);
 		
 		// Add transformed term(s) to the list
 		if(transformedTerm != null) {			
@@ -80,8 +80,7 @@ public abstract class UnWeightedBagOfWords implements BagOfWords {
 			} else {
 				String[] terms = transformedTerm.split(" "); 
 				for(String eachTerm : terms) {
-					_terms.add(eachTerm);
-					Vocabulary.getInstance().addTerm(eachTerm, doc);   // Add to vocabulary					
+					addTerm(eachTerm, doc);
 				}
 			}
 		}

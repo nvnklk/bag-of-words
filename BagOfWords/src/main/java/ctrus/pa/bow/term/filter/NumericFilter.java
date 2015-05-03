@@ -23,8 +23,11 @@ import org.apache.commons.lang3.math.NumberUtils;
 
 public class NumericFilter extends BaseFilter {
 
-	public boolean filter(String term) {		
-		return NumberUtils.isDigits(term);
+	public boolean filter(String term) {
+		boolean filterTerm = false;
+		if(NumberUtils.isDigits(term) || Character.isDigit(term.charAt(0)))
+			filterTerm = true; 
+		return filterTerm;
 	}
 
 }

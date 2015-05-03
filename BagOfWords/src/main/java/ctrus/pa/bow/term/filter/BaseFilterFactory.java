@@ -25,6 +25,7 @@ import ctrus.pa.bow.core.BOWOptions;
 import ctrus.pa.bow.core.DefaultOptions;
 import ctrus.pa.bow.term.FilterFactory;
 import ctrus.pa.bow.term.TermFilter;
+import ctrus.pa.util.CtrusHelper;
 
 public abstract class BaseFilterFactory implements FilterFactory {
 
@@ -52,7 +53,15 @@ public abstract class BaseFilterFactory implements FilterFactory {
 				String minLengthString = _options.getOption(DefaultOptions.MIN_WORD_LENGTH);
 				int minLength = Integer.parseInt(minLengthString);
 				lengthFilter.setMinLength(minLength);
-			} catch (MissingOptionException e) {}			
+			} catch (MissingOptionException e) {
+				lengthFilter.setEnabled(false);
+			} catch (NumberFormatException e) {
+				CtrusHelper.printToConsole("Warning! Term length filter disabled - unable to read input value");
+				lengthFilter.setEnabled(false);
+			}			
+		} else {
+			// No length option specified
+			lengthFilter.setEnabled(false);
 		}
 		
 		return lengthFilter;	
