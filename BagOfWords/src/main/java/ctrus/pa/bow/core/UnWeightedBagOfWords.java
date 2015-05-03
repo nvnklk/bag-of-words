@@ -71,17 +71,19 @@ public abstract class UnWeightedBagOfWords implements BagOfWords {
 		
 		// Transform the term
 		String transformedTerm = _transfomrations.transform(term);
-
+		
 		// Add transformed term(s) to the list
 		if(transformedTerm != null) {			
 			if(transformedTerm.indexOf(" ") == -1) {
 				_terms.add(transformedTerm);
+				Vocabulary.getInstance().addTerm(transformedTerm, doc);   // Add to vocabulary
 			} else {
-				for(String eachTerm : transformedTerm.split("\\p{Space}")) 
+				String[] terms = transformedTerm.split(" "); 
+				for(String eachTerm : terms) {
 					_terms.add(eachTerm);
+					Vocabulary.getInstance().addTerm(eachTerm, doc);   // Add to vocabulary					
+				}
 			}
-			// Add to vocabulary
-			Vocabulary.getInstance().addTerm(transformedTerm, doc);
 		}
 		
 	}
