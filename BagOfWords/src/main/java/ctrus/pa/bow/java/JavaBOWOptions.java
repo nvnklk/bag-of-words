@@ -28,7 +28,7 @@ public class JavaBOWOptions extends DefaultOptions {
 	
 	public final static String METHOD_CHUNKING			= "methodChunking";	
 	public final static String SPLIT_CAMELCASE			= "splitCamelCase";		
-//	public final static String CONSIDER_COPYRIGHT		= "considerCopyright";
+	public final static String CONSIDER_COPYRIGHT		= "considerCopyright";
 //	public final static String RETAIN_COMPOUND_WORDS	= "retainCompoundWords";	
 	public final static String IGNORE_COMMENTS			= "ignoreComments";
 	public final static String NO_STEMMING				= "noStemming";
@@ -46,12 +46,12 @@ public class JavaBOWOptions extends DefaultOptions {
 				.withDescription("Split camel cased terms")
 				.create(SPLIT_CAMELCASE);
 		addOption(o1);					
-/*		
+		
 		Option o3 =  OptionBuilder.hasArg(false)
 				.withDescription("Consider terms from copyright notice in source files")
 				.create(CONSIDER_COPYRIGHT);
 		addOption(o3);	
-*/				
+				
 		Option o4 =  OptionBuilder.hasArg(false)
 				.withDescription("Ignore comments in source files")
 				.create(IGNORE_COMMENTS);

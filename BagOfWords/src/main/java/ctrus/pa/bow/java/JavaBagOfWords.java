@@ -81,10 +81,12 @@ public class JavaBagOfWords extends DefaultBagOfWords {
 		
 			boolean methodChunk = _options.hasOption(JavaBOWOptions.METHOD_CHUNKING);
 			boolean ignoreComments = _options.hasOption(JavaBOWOptions.IGNORE_COMMENTS);
+			boolean considerCopyright =  _options.hasOption(JavaBOWOptions.CONSIDER_COPYRIGHT);
 			
 			// Set up Java source text file tokenizer			
 			JavaFileTokenizer jTokenizer = new JavaFileTokenizer();
 			jTokenizer.setIgnoreComments(ignoreComments);
+			jTokenizer.setConsiderCopyright(considerCopyright);
 			
 			Collection<File> srcfiles = getSourceDocuments("*.java");
 			int totalFiles = srcfiles.size();

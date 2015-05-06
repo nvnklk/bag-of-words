@@ -38,8 +38,9 @@ import ctrus.pa.bow.java.token.MethodTokens;
 
 public class JavaFileTokenizer extends ASTVisitor {
 
-	private boolean _init 			= false;
-	private boolean _ignoreComments = false;
+	private boolean _init 			 = false;
+	private boolean _ignoreComments  = false;
+	private boolean _considerCopyright = false;
 	
 	private ASTParser 		_javaParser  = null;
 	private CompilationUnit _cu 		 = null;
@@ -58,6 +59,10 @@ public class JavaFileTokenizer extends ASTVisitor {
 	
 	public void setIgnoreComments(boolean ignore) {
 		_ignoreComments = ignore;
+	}
+	
+	public void setConsiderCopyright(boolean consider) {
+		_considerCopyright = consider;
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -87,6 +92,14 @@ public class JavaFileTokenizer extends ASTVisitor {
 				int end = start + comment.getLength();
 				String identifierOfComment = _positionObserver.getIdentifierForPosition(start, end); 				
 				String commentText = sourceText.substring(start, end).replaceAll("[\\t\\n\\r]"," ");
+
+				// Do filtering of comments
+				if(!_considerCopyright) {
+					if(commentText.toLowerCase().contains("copyright") || 
+	        			commentText.toLowerCase().contains("license")) continue;
+				}
+	        	// More filtering rules...TBD
+	        	
 				IdentifierTokens it = getTokens(identifierOfComment);
 				it.addCommentToken(commentText);
 			}		

@@ -96,7 +96,8 @@ Additional options for JavaBagOfWords
 	-retainCompoundWords	  	Retain compound terms (eg.camel cased) in the model
 	-methodChunking 		  	Create BOW model per method, default is per class
 	-ignoreComments		  	  	Ignore comments in source files
-	-considerCopyright		  	Consider terms from copyright notice in source files
+	-considerCopyright		  	Consider terms from copyright notice in source files,
+								  ignored by default
 
 Extending
 ---------
