@@ -73,22 +73,21 @@ specific extensions.
  	-outputSingleFile <arg>   	Output single file with each line corresponding
     	                       		to an input source file
  	-replaceJargons <arg>      	Replace jargon with full word provided in a file
- 	-retainNum                	Retain the numerals
+ 	-retainNum                	Retain the numerals, default ignored
  	-sourceDir <arg>          	Directory containing input documents
  	-documentsPerLine         	Each line is a document in the input file(s)
  	-documentIdDelimiter <arg>	Term left to delimiter is considered document Id, 
  									default is space	
- 	-stemAlgo <arg>           	Stemming algorithm to use
+ 	-stemAlgo <arg>           	Stemming algorithm to use, default is PORTER
  	-stopWordsFile <arg>      	Stop words file
  	-termChunkChars <arg>     	Chunk characters eg. ";,_:"
  	-ignoreSpecialChars <arg> 	Special characters to ignore eg. "_$" 
- 	-noStemming              	Do not stem the terms
- 	-useWeight                	Use weights for words
+ 	-noStemming              	Do not stem the terms, default is to stem
  	-printVocabulary		  	Print the vocabulary to a file 'voc.txt'	
  	-hashTerms	<arg>		  	Hash the term if its length exceeds <arg>
- 	-noStemming				  	Do not stem the terms
 
 Additional options for EnBagOfWords
+
 	-preserveDocId 		  	  	Retain the document ids from input
 
 Additional options for JavaBagOfWords
@@ -131,7 +130,8 @@ General Information
 -------------------
 
 ### Contact
-Please direct questions to [Naveen Kulkarni](naveen.kulkarni@research.iiit.ac.in).
+Please direct your questions to [Naveen Kulkarni](naveen{dot}kulkarni{at}research{dot}iiit{dot}ac{dot}in)
+with email subject - "GitHub BOW"
 
 ### Dependency
 
