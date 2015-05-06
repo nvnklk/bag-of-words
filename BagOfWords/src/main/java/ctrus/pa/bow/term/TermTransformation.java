@@ -43,6 +43,8 @@ public class TermTransformation {
 	}
 	
 	public String transform(String term) {
+		if(term == null || term.length() == 0) return term;
+		
 		String transformedTerm = term;
 		// Check if the term is a multi term
 		if(isMultiTerm(transformedTerm)) {

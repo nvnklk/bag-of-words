@@ -66,6 +66,9 @@ public abstract class UnWeightedBagOfWords implements BagOfWords {
 	}
 		
 	public final void addTerm(String term, String doc) {
+		// Check if term is null or empty
+		if(term == null || term.length() == 0) return;
+		
 		// Is it required to be added?
 		if(_filterations.filter(term)) return;
 		
@@ -73,11 +76,13 @@ public abstract class UnWeightedBagOfWords implements BagOfWords {
 		String transformedTerm = _transformations.transform(term);
 		
 		// Add transformed term(s) to the list
-		if(transformedTerm != null) {			
-			if(transformedTerm.indexOf(" ") == -1) {
+		if(transformedTerm != null && transformedTerm.length() != 0) {			
+			if(transformedTerm.indexOf(" ") == -1) {	
+				// Not a compound term
 				_terms.add(transformedTerm);
 				Vocabulary.getInstance().addTerm(transformedTerm, doc);   // Add to vocabulary
 			} else {
+				// compound term, split and add
 				String[] terms = transformedTerm.split(" "); 
 				for(String eachTerm : terms) {
 					addTerm(eachTerm, doc);
