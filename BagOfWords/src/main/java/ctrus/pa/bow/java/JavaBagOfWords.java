@@ -65,10 +65,10 @@ public class JavaBagOfWords extends DefaultBagOfWords {
 		setTransformations(termTransformation);
 				
 		// Add all required transformers
-		JavaTransformerFactory transformerFactory = JavaTransformerFactoryImpl.newInstance(_options);
-		termTransformation.addTransfomer(transformerFactory.createJargonTransformer());
+		JavaTransformerFactory transformerFactory = JavaTransformerFactoryImpl.newInstance(_options);		
 		termTransformation.addTransfomer(transformerFactory.createCamelcaseTransformer());
-		termTransformation.addTransfomer(transformerFactory.createChunkTransformer());		
+		termTransformation.addTransfomer(transformerFactory.createChunkTransformer());	
+		termTransformation.addTransfomer(transformerFactory.createJargonTransformer());
 		termTransformation.addTransfomer(transformerFactory.createSanityTransformer());				
 		termTransformation.addTransfomer(transformerFactory.createLowercaseTransformer());
 		termTransformation.addTransfomer(transformerFactory.createStemmingTransformer());
