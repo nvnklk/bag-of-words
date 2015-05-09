@@ -39,7 +39,7 @@ public abstract class DefaultBagOfWords extends UnWeightedBagOfWords {
 	protected static final String DEFAULT_OUTPUT_DIR 		= "output";
 	protected static final String DEFAULT_OUTPUT_FILE 		= "bow.txt";
 	protected static final String DEFAULT_TERM_VOCAB_FILE 	= "term_vocab.txt";
-	protected static final String DEFAULT_TERM_FREQ_FILE 	= "term_freq.txt";
+	protected static final String DEFAULT_TERM_FREQ_FILE 	= "vocab_freq.txt";
 	protected static final String DEFAULT_DOC_VOCAB_FILE 	= "doc.txt";
 	
 	protected BOWOptions 		_options 		= null;

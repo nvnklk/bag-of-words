@@ -105,14 +105,15 @@ public class Vocabulary implements Serializable {
 	}
 	
 	public final void writeDocVocabularyTo(OutputStream out) throws IOException {
+		IOUtils.write("DOC_REF,DOC_NAME\n", out);
 		for(String docref : _docVocabulary.keySet()) {
 			DocMeta d = _docVocabulary.get(docref); 
-			IOUtils.write(d.doc_id + "," + docref + "," + d.file_name + "\n", out);			
+			IOUtils.write(docref + "," + d.file_name + "\n", out);			
 		}
 	}
 	
 	public final void writeTermVocabularyTo(OutputStream out) throws IOException {
-		IOUtils.write("TERM_ID,TERM,DOC_ID,FREQ \n", out);		
+		IOUtils.write("TERM,FREQ \n", out);		
 		for(String term : _termVocabulary.keySet()) {
 			TermMeta t = _termVocabulary.get(term);
 			// Add the term frequency
@@ -124,7 +125,7 @@ public class Vocabulary implements Serializable {
 				tfq.bucket = t.freq;				
 				_termFrequency.put(t.freq, tfq);
 			}
-			IOUtils.write(t.term_id + "," + term + "," + t.doc_id + "," + t.freq + "\n", out);
+			IOUtils.write(term + "," + t.freq + "\n", out);
 		}			
 	}
 	
