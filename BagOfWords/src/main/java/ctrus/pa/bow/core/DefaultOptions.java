@@ -24,27 +24,28 @@ import org.apache.commons.cli.OptionBuilder;
 
 public class DefaultOptions extends BOWOptionsImpl {
 	
-	public final static String USE_WEIGHT 			= "useWeight";
-	public final static String USE_STEMMING 		= "useStemming";
-	public final static String REPLACE_JARGONS		= "replaceJargons";
-	public final static String CASE_SENSITIVE 		= "caseSensitive";
-	public final static String RETAIN_NUMERAL 		= "retainNum";
-	public final static String MIN_WORD_LENGTH 		= "minWordLength";	
-	public final static String STEMMING_ALGO 		= "stemAlgo";	
-	public final static String SOURCE_DIR 			= "sourceDir";
-	public final static String DOCUMENT_PER_LINE 	= "documentsPerLine";
-	public final static String OUTPUT_SINGLE_FILE 	= "outputSingleFile";
-	public final static String STOP_WORDS_FILE		= "stopWordsFile";
-	public final static String OUTPUT_DIR			= "outputDir";
-	public final static String TERM_CHUNK_CHARS		= "termChunkChars";
-	public final static String PRINT_VOCABULARY		= "printVocabulary";
-	public final static String HASH_TERMS			= "hashTerms";
-	public final static String IGNORE_SPECIAL_CHARS	= "ignoreSpecialChars";
-	public final static String NO_STEMMING			= "noStemming";
-	public final static String DOCUMENT_ID_DELIMITER= "documentIdDelimiter";
+	public final static String USE_WEIGHT 			 = "useWeight";
+	public final static String USE_STEMMING 		 = "useStemming";
+	public final static String REPLACE_JARGONS		 = "replaceJargons";
+	public final static String CASE_SENSITIVE 		 = "caseSensitive";
+	public final static String RETAIN_NUMERAL 		 = "retainNum";
+	public final static String MIN_WORD_LENGTH 		 = "minWordLength";	
+	public final static String STEMMING_ALGO 		 = "stemAlgo";	
+	public final static String SOURCE_DIR 			 = "sourceDir";
+	public final static String DOCUMENT_PER_LINE 	 = "documentsPerLine";
+	public final static String OUTPUT_SINGLE_FILE 	 = "outputSingleFile";
+	public final static String STOP_WORDS_FILE		 = "stopWordsFile";
+	public final static String OUTPUT_DIR			 = "outputDir";
+	public final static String TERM_CHUNK_CHARS		 = "termChunkChars";
+	public final static String PRINT_VOCABULARY		 = "printVocabulary";
+	public final static String HASH_TERMS			 = "hashTerms";
+	public final static String IGNORE_SPECIAL_CHARS	 = "ignoreSpecialChars";
+	public final static String NO_STEMMING			 = "noStemming";
+	public final static String DOCUMENT_ID_DELIMITER = "documentIdDelimiter";
+	public final static String PRESERVE_DOC_ID		 = "preserveDocId";
 	
-	public final static String DEBUG_LOG			= "debugLog";			
-	public final static String PRINT_HELP			= "help";
+	public final static String DEBUG_LOG			 = "debugLog";			
+	public final static String PRINT_HELP			 = "help";
 	
 	public final static String INTERNAL_REMOVE_STOP_WORDS = "removeStopWords";
 	
@@ -156,6 +157,11 @@ public class DefaultOptions extends BOWOptionsImpl {
 				.withDescription("Term left to delimiter is considered document Id, default is space")
 				.create(DOCUMENT_ID_DELIMITER);
 		addOption(o20);
+		
+		Option o21 = OptionBuilder.hasArg(false)
+				.withDescription("Retain the document ids from input")
+				.create(PRESERVE_DOC_ID);
+		addOption(o21);
 		
 	}
 

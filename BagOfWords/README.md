@@ -84,17 +84,19 @@ specific extensions.
  	-ignoreSpecialChars <arg> 	Special characters to ignore eg. "_$" 
  	-noStemming              	Do not stem the terms, default is to stem
  	-printVocabulary		  	Print the vocabulary to a file 'voc.txt'	
- 	-hashTerms	<arg>		  	Hash the term if its length exceeds <arg>
-
+ 	-hashTerms <arg>		  	Hash the term if its length exceeds <arg>
+	-preserveDocId 		  	  	Retain the document ID or name from input file
+	
 Additional options for EnBagOfWords
 
-	-preserveDocId 		  	  	Retain the document ids from input
+	--NILL--
 
 Additional options for JavaBagOfWords
 	
 	-splitCamelCase 		  	Split camel cased words
-	-retainCompoundWords	  	Retain compound terms (eg.camel cased) in the model
-	-methodChunking 		  	Create BOW model per method, default is per class
+	-retainCompoundWords	  	Retain compound terms (eg.camel cased) along with 
+								  split words
+	-methodChunking 		  	Create BOW per method, default is per class
 	-ignoreComments		  	  	Ignore comments in source files
 	-considerCopyright		  	Consider terms from copyright notice in source files,
 								  ignored by default

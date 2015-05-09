@@ -87,11 +87,8 @@ public class EnBagOfWords extends DefaultBagOfWords {
 						String[] docAndContent = line.split(delimiter);
 						if(docAndContent.length > 1 && !docAndContent[1].isEmpty()){
 							
-							String docref = "";
-							if(!_options.hasOption(EnBOWOptions.PRESERVE_DOC_ID))
-								docref = CtrusHelper.uniqueId(docAndContent[0]).toString();
-							else
-								docref = docAndContent[0];
+							String docref = getDocumentId(docAndContent[0]);
+
 							// Add document to the vocabulary first before adding terms
 							Vocabulary.getInstance().addDocument(docref, docAndContent[0]);
 						
@@ -103,7 +100,9 @@ public class EnBagOfWords extends DefaultBagOfWords {
 				} else {
 					// Add document to file name mapping
 					String fileName = srcFile.getName();
-					String docref = CtrusHelper.uniqueId(fileName).toString();
+					fileName = fileName.substring(0, fileName.lastIndexOf("."));
+					
+					String docref = getDocumentId(fileName);
 
 					// Add document to the vocabulary first before adding terms
 					Vocabulary.getInstance().addDocument(docref, fileName);

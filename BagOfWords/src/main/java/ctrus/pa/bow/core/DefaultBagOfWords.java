@@ -109,6 +109,11 @@ public abstract class DefaultBagOfWords extends UnWeightedBagOfWords {
 		
 	}	
 	
+	protected String getDocumentId(String fileName) {
+		return (_options.hasOption(DefaultOptions.PRESERVE_DOC_ID)) ?
+				fileName : CtrusHelper.uniqueId(fileName).toString();
+	}
+	
 	protected Collection<File> getSourceDocuments(String wildCard) throws MissingOptionException {		
 		File sourceDir = new File(_options.getOption(DefaultOptions.SOURCE_DIR));
 		if(sourceDir.exists()){

@@ -104,7 +104,7 @@ public class JavaBagOfWords extends DefaultBagOfWords {
 						MethodTokens m = c.getMethodTokens(mId);						
 						if(methodChunk) {
 							String methodName = m.getIdentifier();
-							String docref = CtrusHelper.uniqueId(methodName).toString();
+							String docref = getDocumentId(methodName);
 							
 							// Add document to the vocabulary first before adding terms
 							String docName = srcFile.getName() + ":" + methodName;
@@ -130,8 +130,8 @@ public class JavaBagOfWords extends DefaultBagOfWords {
 					}
 					
 					if(!methodChunk) {
-						// Add document to file name mapping
-						String docref = CtrusHelper.uniqueId(c.getIdentifier()).toString();
+						// Add document to file name mapping						
+						String docref = getDocumentId(c.getIdentifier());
 
 						// Add document to the vocabulary first before adding terms
 						Vocabulary.getInstance().addDocument(docref, srcFile.getName());
