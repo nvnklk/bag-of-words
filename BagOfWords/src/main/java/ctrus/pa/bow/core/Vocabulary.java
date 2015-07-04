@@ -23,12 +23,16 @@ import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Serializable;
+import java.util.List;
 import java.util.concurrent.ConcurrentNavigableMap;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.apache.commons.io.IOUtils;
 import org.mapdb.DB;
 import org.mapdb.DBMaker;
+
+import ctrus.pa.util.CtrusHelper;
+import ctrus.pa.util.FNVHash;
 
 public class Vocabulary implements Serializable {
 	
@@ -40,6 +44,8 @@ public class Vocabulary implements Serializable {
 	private ConcurrentNavigableMap<String, TermMeta> _termVocabulary = null;
 	private ConcurrentNavigableMap<Long, TermFreq> _termFrequency = null;
 	private ConcurrentNavigableMap<String, DocMeta> _docVocabulary = null;
+	
+	private static final List<FNVHash> hashFunctions = FNVHash.newHashFunctions(10);
 		
 	private class DocMeta implements Serializable {
 		
@@ -60,7 +66,8 @@ public class Vocabulary implements Serializable {
 		private static final long serialVersionUID = 5448836097415306367L;
 		public long term_id = 0;
 		public long doc_id = 0;
-		public long  freq = 1;		
+		public long  freq = 1;
+		public List<String> minHash = null;
 	}
 
 	private Vocabulary() {}
@@ -89,7 +96,8 @@ public class Vocabulary implements Serializable {
 			
 			TermMeta tm = new TermMeta();
 			tm.term_id = term_counter.incrementAndGet();
-			tm.doc_id = _docVocabulary.get(doc).doc_id;			
+			tm.doc_id = _docVocabulary.get(doc).doc_id;		
+			tm.minHash = CtrusHelper.minHash(term, 3, hashFunctions);
 			_termVocabulary.put(term, tm);
 		}
 	}
@@ -113,7 +121,7 @@ public class Vocabulary implements Serializable {
 	}
 	
 	public final void writeTermVocabularyTo(OutputStream out) throws IOException {
-		IOUtils.write("TERM,FREQ \n", out);		
+		IOUtils.write("TERM,FREQ,HASH \n", out);		
 		for(String term : _termVocabulary.keySet()) {
 			TermMeta t = _termVocabulary.get(term);
 			// Add the term frequency
@@ -125,7 +133,14 @@ public class Vocabulary implements Serializable {
 				tfq.bucket = t.freq;				
 				_termFrequency.put(t.freq, tfq);
 			}
-			IOUtils.write(term + "," + t.freq + "\n", out);
+			StringBuffer sb = new StringBuffer();
+			if(t.minHash != null) {
+				for(String s : t.minHash)
+					sb.append(s).append(" ");
+				IOUtils.write(term + "," + t.freq + "," + sb.toString() + "\n", out);
+			} else {
+				IOUtils.write(term + "," + t.freq + "\n", out);
+			}
 		}			
 	}
 	

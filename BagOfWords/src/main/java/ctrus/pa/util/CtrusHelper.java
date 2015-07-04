@@ -19,9 +19,9 @@
 
 package ctrus.pa.util;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.apache.commons.lang3.StringUtils;
-
-import ctrus.pa.party3.hash.MurmurHash3;
 
 /**
  * A utility Class
@@ -29,6 +29,7 @@ import ctrus.pa.party3.hash.MurmurHash3;
  */
 public class CtrusHelper {
 
+	
 	/**
 	 * A command line progress bar.
 	 * Author: http://nakkaya.com/2009/11/08/command-line-progress-bar/
@@ -75,7 +76,7 @@ public class CtrusHelper {
 			throw new IllegalArgumentException("Input cannot be null or empty");
 
 		//long idNum = MurmurHash2.hash64(sClean);
-		long idNum = MurmurHash3.hashUnencodedChars(s);
+		long idNum = FNVHash.newHashFunction().hash64(s.getBytes());		
 		idNum = idNum < 0 ? -idNum : idNum;
 
 		String uid = "";
@@ -89,6 +90,37 @@ public class CtrusHelper {
         }
 
         return uid;
+	}
+	
+
+	public static final List<String> minHash(String s, int windowSize, List<FNVHash> hashFunctions) {
+        // Build a list of shingles
+        int l = s.length(), w = windowSize, i=0;
+        
+        // Create shingles of windowSize length with a single char overlapping
+        List<String> shingles = new ArrayList<String>();
+        for(i=1; i<=l-w; i+=1){
+        	shingles.add(s.substring(i-1,i+w).toLowerCase());
+        }
+        // any remaining substrings that are less than windowSize
+        if (l > i) {
+        	shingles.add(s.substring(i, l).toLowerCase());
+        }
+        
+        return getMinHashValue(shingles, hashFunctions);
+	}
+	
+	private static List<String> getMinHashValue(List<String> shingles, List<FNVHash> hashFunctions) {
+        List<String> minHashes = new ArrayList<String>();
+        for(FNVHash h : hashFunctions) {
+            int minHashVal = Integer.MAX_VALUE;
+            for (String s: shingles) {
+                int hVal = h.hash32(s.getBytes());
+                if(hVal < minHashVal) minHashVal = hVal;
+            }
+            minHashes.add(Integer.toHexString(minHashVal));
+        }
+        return minHashes;
 	}
 
 }

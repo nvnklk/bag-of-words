@@ -103,11 +103,10 @@ public class JavaBagOfWords extends DefaultBagOfWords {
 					for(String mId : c.getMethodIdentifiers()) {
 						MethodTokens m = c.getMethodTokens(mId);						
 						if(methodChunk) {
-							String methodName = m.getIdentifier();
-							String docref = getDocumentId(methodName.replaceAll(" ", "_"));
-							
 							// Add document to the vocabulary first before adding terms
-							String docName = srcFile.getName() + ":" + methodName;
+							String docName = srcFile.getName() + ":" + m.getIdentifier();							
+							String docref = getDocumentId(docName.replaceAll(" ", "_"));
+							
 							Vocabulary.getInstance().addDocument(docref, docName);
 							
 							addTerms(ArrayUtils.addAll(m.getTokens(), classTokens), docref);
