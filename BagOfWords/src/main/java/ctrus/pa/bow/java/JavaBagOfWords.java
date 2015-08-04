@@ -26,6 +26,7 @@ import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.io.FilenameUtils;
 
 import ctrus.pa.bow.core.DefaultBagOfWords;
 import ctrus.pa.bow.core.DefaultOptions;
@@ -40,6 +41,7 @@ import ctrus.pa.util.CtrusHelper;
 public class JavaBagOfWords extends DefaultBagOfWords {
 
 	TermFilter _stopWordFilterForComments = null;
+	protected static final String DEFAULT_OUTPUT_MCHUNK_DIR = "method_chunk";
 	
 	public JavaBagOfWords() {}
 	
@@ -88,10 +90,11 @@ public class JavaBagOfWords extends DefaultBagOfWords {
 			jTokenizer.setIgnoreComments(ignoreComments);
 			jTokenizer.setConsiderCopyright(considerCopyright);
 			
-			Collection<File> srcfiles = getSourceDocuments("*.java");
+			String fileSelectWildCard = "*.java";
+			Collection<File> srcfiles = getSourceDocuments(fileSelectWildCard);
 			int totalFiles = srcfiles.size();
 			int currentFile = 0;
-			CtrusHelper.printToConsole("Total files - " + srcfiles.size());			
+			CtrusHelper.printToConsole("Total files (" +  fileSelectWildCard + ") - " + srcfiles.size());			
 
 			for(File srcFile : srcfiles) {								
 				// Parse the Java source file using a Off-the-shelf Java Parser
@@ -101,11 +104,15 @@ public class JavaBagOfWords extends DefaultBagOfWords {
 					String[] commentTokens = c.getCommentTokens();
 					String[] classTokens = c.getTokens();
 					for(String mId : c.getMethodIdentifiers()) {
-						MethodTokens m = c.getMethodTokens(mId);						
+						MethodTokens m = c.getMethodTokens(mId);	
+						
 						if(methodChunk) {
 							// Add document to the vocabulary first before adding terms
-							String docName = srcFile.getName() + ":" + m.getIdentifier();							
+							String methodName = m.getIdentifier();
+							String classFolderName = FilenameUtils.removeExtension(srcFile.getName()); 
+							String docName =  classFolderName + ":" + methodName;							
 							String docref = getDocumentId(docName.replaceAll(" ", "_"));
+							String fileName = getDocumentId(methodName.replaceAll(" ", "_"));
 							
 							Vocabulary.getInstance().addDocument(docref, docName);
 							
@@ -118,8 +125,17 @@ public class JavaBagOfWords extends DefaultBagOfWords {
 								_stopWordFilterForComments.setEnabled(false);
 							}
 							
+							// Check if method_chunk folder exists and Create folder with name of the class, create if not exists
+							File method_chunk_folder = new File(_outputDir, DEFAULT_OUTPUT_MCHUNK_DIR);
+							_outputDir = new File(method_chunk_folder, FilenameUtils.removeExtension(srcFile.getName()));
+							if(!_outputDir.exists()) 
+								_outputDir.mkdirs();
+							
+							String name = hasOption(DefaultOptions.OUTPUT_SINGLE_FILE) ? docref : fileName;
+								
 							// Write bow to the file
-							writeToOutput(docref);
+							writeToOutput(name);
+							setupOutputDir(); // Set output dir back to the root to avoid recursive folder creation
 							reset();  // Reset so that next method tokens can 
 									  // be added as new document 
 						} else {

@@ -25,6 +25,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Collection;
+import java.util.StringTokenizer;
 
 import org.apache.commons.cli.MissingOptionException;
 import org.apache.commons.io.FileUtils;
@@ -36,7 +37,7 @@ import ctrus.pa.util.CtrusHelper;
 
 public abstract class DefaultBagOfWords extends UnWeightedBagOfWords {
 		
-	protected static final String DEFAULT_OUTPUT_DIR 		= "output";
+	protected static final String DEFAULT_OUTPUT_DIR 		= "output";	
 	protected static final String DEFAULT_OUTPUT_FILE 		= "bow.txt";
 	protected static final String DEFAULT_TERM_VOCAB_FILE 	= "term_vocab.txt";
 	protected static final String DEFAULT_TERM_FREQ_FILE 	= "vocab_freq.txt";
@@ -57,14 +58,7 @@ public abstract class DefaultBagOfWords extends UnWeightedBagOfWords {
 		this._options = options;
 		
 		// Prepare the output directory
-		String outputDirString = null;
-		try{
-			outputDirString = getOption(DefaultOptions.OUTPUT_DIR);
-		} catch (MissingOptionException ex) {
-			outputDirString = DEFAULT_OUTPUT_DIR; 
-		}
-		_outputDir = new File(outputDirString);
-		if(!_outputDir.exists()) _outputDir.mkdirs();
+		setupOutputDir();
 		CtrusHelper.printToConsole("Output folder - " + _outputDir.getAbsolutePath());
 		
 		// Prepare the single output file
@@ -87,6 +81,17 @@ public abstract class DefaultBagOfWords extends UnWeightedBagOfWords {
 		setup();
 	}
 	
+	protected void setupOutputDir() {
+		String outputDirString = null;
+		try{
+			outputDirString = getOption(DefaultOptions.OUTPUT_DIR);
+		} catch (MissingOptionException ex) {
+			outputDirString = DEFAULT_OUTPUT_DIR; 
+		}
+		_outputDir = new File(outputDirString);
+		if(!_outputDir.exists()) _outputDir.mkdirs();		
+	}
+	
 	protected String getOption(String key) throws MissingOptionException {
 		return _options.getOption(key);
 	}
@@ -94,7 +99,7 @@ public abstract class DefaultBagOfWords extends UnWeightedBagOfWords {
 	protected boolean hasOption(String key) {
 		return _options.hasOption(key);
 	}
-	
+
 	// Write the terms collected to output file
 	protected void writeToOutput(String doc) throws IOException {				
 		if(_singleFileOut){
@@ -105,8 +110,7 @@ public abstract class DefaultBagOfWords extends UnWeightedBagOfWords {
 			writeTo(_out);					
 			_out.close();
 			_out = null;
-		} 
-		
+		} 		
 	}	
 	
 	protected String getDocumentId(String fileName) {
@@ -114,8 +118,9 @@ public abstract class DefaultBagOfWords extends UnWeightedBagOfWords {
 				fileName : CtrusHelper.uniqueId(fileName).toString();
 	}
 	
-	protected Collection<File> getSourceDocuments(String wildCard) throws MissingOptionException {		
+	protected Collection<File> getSourceDocuments(String wildCard) throws MissingOptionException {			
 		File sourceDir = new File(_options.getOption(DefaultOptions.SOURCE_DIR));
+		CtrusHelper.printToConsole("Choosen source folder - " + sourceDir.getAbsolutePath());		
 		if(sourceDir.exists()){
 			return FileUtils.listFiles(sourceDir, new WildcardFileFilter(wildCard), DirectoryFileFilter.DIRECTORY);
 		} else {

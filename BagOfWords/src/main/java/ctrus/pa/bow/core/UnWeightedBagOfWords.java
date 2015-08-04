@@ -30,6 +30,7 @@ import org.apache.commons.lang3.NotImplementedException;
 
 import ctrus.pa.bow.term.TermFilteration;
 import ctrus.pa.bow.term.TermTransformation;
+import ctrus.pa.util.CtrusHelper;
 
 public abstract class UnWeightedBagOfWords implements BagOfWords {
 
@@ -69,7 +70,7 @@ public abstract class UnWeightedBagOfWords implements BagOfWords {
 		// Check if term is null or empty
 		if(term == null || term.length() == 0) return;
 		
-		// Is it required to be added?
+		// Is it required to be added?	// First filtration
 		if(_filterations.filter(term)) return;
 		
 		// Transform the term
@@ -77,12 +78,13 @@ public abstract class UnWeightedBagOfWords implements BagOfWords {
 		
 		// Add transformed term(s) to the list
 		if(transformedTerm != null && transformedTerm.length() != 0) {			
-			if(transformedTerm.indexOf(" ") == -1) {	
-				// Not a compound term
-				_terms.add(transformedTerm);
-				Vocabulary.getInstance().addTerm(transformedTerm, doc);   // Add to vocabulary
-			} else {
-				// compound term, split and add
+			if(transformedTerm.indexOf(" ") == -1) {	// Not a compound term				
+				if(!_filterations.filter(transformedTerm)) {	// Second filtration					 
+					_terms.add(transformedTerm);					
+					// Add to vocabulary
+					Vocabulary.getInstance().addTerm(transformedTerm, doc);
+				}
+			} else {	// compound term, split and add				
 				String[] terms = transformedTerm.split(" "); 
 				for(String eachTerm : terms) {
 					addTerm(eachTerm, doc);
