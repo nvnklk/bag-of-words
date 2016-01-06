@@ -21,13 +21,19 @@ package ctrus.pa.bow.java;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
+import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.dom.AST;
+import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.ASTVisitor;
+import org.eclipse.jdt.core.dom.AnnotationTypeDeclaration;
 import org.eclipse.jdt.core.dom.Comment;
 import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.eclipse.jdt.core.dom.EnumDeclaration;
+import org.eclipse.jdt.core.dom.NormalAnnotation;
 import org.eclipse.jdt.core.dom.PackageDeclaration;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 
@@ -38,9 +44,10 @@ import ctrus.pa.bow.java.token.MethodTokens;
 
 public class JavaFileTokenizer extends ASTVisitor {
 
-	private boolean _init 			 = false;
-	private boolean _ignoreComments  = false;
-	private boolean _considerCopyright = false;
+	private boolean _init 			 	= false;
+	private boolean _ignoreComments  	= false;
+	private boolean _considerCopyright 	= false;
+	private boolean _stateAnalysis		= false;
 	
 	private ASTParser 		_javaParser  = null;
 	private CompilationUnit _cu 		 = null;
@@ -65,6 +72,10 @@ public class JavaFileTokenizer extends ASTVisitor {
 		_considerCopyright = consider;
 	}
 	
+	public void setStateAnalysis(boolean stateAnalysis) {
+		_stateAnalysis = stateAnalysis;
+	}
+	
 	@SuppressWarnings("unchecked")
 	public void tokenize(List<String> sourceTextLines) {
 		// initialize if not done earlier
@@ -75,16 +86,16 @@ public class JavaFileTokenizer extends ASTVisitor {
 		_positionObserver = new IdentifiersPosition();
 		
 		// Normalize single line comments to block comments
-		String sourceText = _preProcessSourceText(sourceTextLines);
+		StringBuffer sourceText = _preProcessSourceText(sourceTextLines);
 		
 		// Extract all identifiers from java source text
-		_javaParser.setSource(sourceText.toCharArray());				
+		_javaParser.setSource(sourceText.toString().toCharArray());				
 		_cu = (CompilationUnit) _javaParser.createAST(null);
 		_cu.accept(this);
 		
 		// Extract all comments from java source text
 		// and merge them with their corresponding identifiers
-		if(!_ignoreComments) {
+		if(!_ignoreComments && !_stateAnalysis) {
 			// Extract
 			List<Comment> comments = (List<Comment>) _cu.getCommentList();		
 			for (Comment comment : comments) {
@@ -106,20 +117,26 @@ public class JavaFileTokenizer extends ASTVisitor {
 		}
 		
 		// Add package information
-		for(ClassTokens c : _classTokens) 
-			c.addToken(_packageName);
+		if(!_stateAnalysis) {
+			for(ClassTokens c : _classTokens) 
+				c.addToken(_packageName);
+		}
 	}
 	
 	private void _init() {
-		_javaParser = ASTParser.newParser(AST.JLS3);
+		_javaParser = ASTParser.newParser(AST.JLS8);
 		_javaParser.setKind(ASTParser.K_COMPILATION_UNIT);
+		
+		Map options = JavaCore.getOptions();
+		JavaCore.setComplianceOptions(JavaCore.VERSION_1_8, options);
+		_javaParser.setCompilerOptions(options);
 		
 		_classTokens = new ArrayList<ClassTokens>();
 		
 		_init = true;				
 	}
 	
-	private String _preProcessSourceText(List<String> sourceTextLines) {
+	private StringBuffer _preProcessSourceText(List<String> sourceTextLines) {
 		StringBuffer javaSourceTextBuffer = new StringBuffer();
 		boolean commentMarked = false;
 		for(String line : sourceTextLines) {
@@ -138,7 +155,7 @@ public class JavaFileTokenizer extends ASTVisitor {
 			}
 			javaSourceTextBuffer.append("\n");
 		}			
-		return new String(javaSourceTextBuffer);
+		return javaSourceTextBuffer;
 	}	
 	
 	private IdentifierTokens getTokens(String identifier) {
@@ -158,20 +175,38 @@ public class JavaFileTokenizer extends ASTVisitor {
 	//-------------------------------------------------------------------------
 	// Overridden ASTVisitor visit methods
 	
-	public boolean visit(TypeDeclaration node) {
+	@Override
+	public boolean visit(TypeDeclaration node) {		
 		// Add class 
-		ClassTokens eachClassTokens = new ClassTokens(_ignoreComments);
+		ClassTokens eachClassTokens = new ClassTokens(_ignoreComments, _stateAnalysis);
 		eachClassTokens.acceptVisitor(_positionObserver);
 		eachClassTokens.addTokens(node);
 		_classTokens.add(eachClassTokens);
 		return true;	// continue visiting other class definitions if found 
 	}
 	
+	@Override
 	public boolean visit(PackageDeclaration node) {
 		_packageName = node.getName().getFullyQualifiedName();
 		return true;
 	}
-
 	
+	@Override
+	public boolean visit(AnnotationTypeDeclaration node) {
+		System.out.println("Found custom annotation type - " + node.getName().getFullyQualifiedName());
+		return true;
+	}
+	
+	@Override
+	public boolean visit(EnumDeclaration node) {
+		System.out.println("Found custom Enum type - " + node.getName().getFullyQualifiedName());
+		return true;
+	}
+	
+	@Override
+	public boolean visit(NormalAnnotation node) {
+		System.out.println("Found Annotation - " + node.getTypeName());
+		return true;
+	}
 }
 

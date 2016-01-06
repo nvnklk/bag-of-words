@@ -43,9 +43,11 @@ public class ClassTokens extends IdentifierTokens {
 	private Map<String, MethodTokens> _methodsTokens = new HashMap<String, MethodTokens>();
 	
 	private boolean _ignoreComments = true;
+	private boolean _stateAnalysis = false;
 	
-	public ClassTokens(boolean ignoreComments) {
+	public ClassTokens(boolean ignoreComments, boolean stateAnalysis) {
 		_ignoreComments = ignoreComments;
+		_stateAnalysis = stateAnalysis;
 	}
 	
 	public Iterable<String> getMethodIdentifiers() {
@@ -64,39 +66,43 @@ public class ClassTokens extends IdentifierTokens {
 			throw new IllegalArgumentException("Expecting class type declaration but found " + node.getClass().getName());
 		
 		TypeDeclaration cls = (TypeDeclaration)node;
-		
+
 		// Add class and its super types
 		String className = cls.getName().toString(); 
-		addToken(className);
 		
 		// Set the identifier of this token-set
 		setIdentifier(className);
-		
-		// Add interfaces and super class if any
-		if(cls.getSuperclassType() != null)
-			addToken(cls.getSuperclassType().toString());
-		List<Type> superInterfaces = (List<Type>)cls.superInterfaceTypes();
-		for(Type superInterface : superInterfaces) {
-			addToken(superInterface.toString());
+
+		if(!_stateAnalysis) {
+			
+			// Add class name to token list
+			addToken(className);
+			
+			// Add interfaces and super class if any
+			if(cls.getSuperclassType() != null)
+				addToken(cls.getSuperclassType().toString());
+			List<Type> superInterfaces = (List<Type>)cls.superInterfaceTypes();
+			for(Type superInterface : superInterfaces) {
+				addToken(superInterface.toString());
+			}
+			
+			// Collect tokens from field declarations
+			for(FieldDeclaration field : cls.getFields()) {
+				addTokensFromFieldDeclaration(field);
+			}			
 		}
 		
-		// Collect tokens from field declarations
-		for(FieldDeclaration field : cls.getFields()) {
-			addTokensFromFieldDeclaration(field);
-		}			
-		
-		// Collect tokens for each method
-		
+		// Collect tokens for each method		
 		for(MethodDeclaration mth : cls.getMethods()) {
 			boolean hasBody = !cls.isInterface();
-			MethodTokens methodTokens = new MethodTokens(hasBody, _ignoreComments);
+			MethodTokens methodTokens = new MethodTokens(hasBody, _ignoreComments, _stateAnalysis);
 			methodTokens.acceptVisitor(_positionVisitor);
-			methodTokens.addTokens(mth);
+			methodTokens.addTokens(mth);			
 			_methodsTokens.put(methodTokens.getIdentifier(), methodTokens);
 		}
 		
 		// Collect tokens from comments associated with the class definition
-		if(!_ignoreComments){
+		if(!_ignoreComments && !_stateAnalysis){
 			addTokensFromJavaDoc(cls.getJavadoc());
 		}	
 		
@@ -132,7 +138,7 @@ public class ClassTokens extends IdentifierTokens {
 		
 		// Add any javadocs associated with the field to tokens
 		// Block and line comments are added later
-		if(!_ignoreComments ) {
+		if(!_ignoreComments && !_stateAnalysis) {
 			addTokensFromJavaDoc(fd.getJavadoc());
 		}
 	}

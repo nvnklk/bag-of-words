@@ -20,6 +20,7 @@
 package ctrus.pa.bow.core;
 
 import java.io.PrintWriter;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,8 +33,9 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
-public abstract class BOWOptionsImpl implements BOWOptions {
-
+public abstract class BOWOptionsImpl implements BOWOptions, Serializable {
+	
+	private static final long	serialVersionUID	= 1232656881902982991L;
 	private Options 			_cliOptions 	 = new Options();
 	private Map<String, String> _internalOptions = new HashMap<String, String>();
 	private CommandLine			_parsedOptions 	 = null;

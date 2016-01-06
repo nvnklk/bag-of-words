@@ -79,16 +79,19 @@ public class JavaBagOfWords extends DefaultBagOfWords {
 	
 	@Override
 	public void create() {
+		String currentFileInProcess = null;
 		try {
 		
 			boolean methodChunk = _options.hasOption(JavaBOWOptions.METHOD_CHUNKING);
 			boolean ignoreComments = _options.hasOption(JavaBOWOptions.IGNORE_COMMENTS);
 			boolean considerCopyright =  _options.hasOption(JavaBOWOptions.CONSIDER_COPYRIGHT);
+			boolean stateAnalysis = _options.hasOption(JavaBOWOptions.STATE_ANALYSIS);
 			
 			// Set up Java source text file tokenizer			
 			JavaFileTokenizer jTokenizer = new JavaFileTokenizer();
 			jTokenizer.setIgnoreComments(ignoreComments);
 			jTokenizer.setConsiderCopyright(considerCopyright);
+			jTokenizer.setStateAnalysis(stateAnalysis);
 			
 			String fileSelectWildCard = "*.java";
 			Collection<File> srcfiles = getSourceDocuments(fileSelectWildCard);
@@ -96,11 +99,16 @@ public class JavaBagOfWords extends DefaultBagOfWords {
 			int currentFile = 0;
 			CtrusHelper.printToConsole("Total files (" +  fileSelectWildCard + ") - " + srcfiles.size());			
 
-			for(File srcFile : srcfiles) {								
+			for(File srcFile : srcfiles) {
+				// to debug in case of failure
+				currentFileInProcess = srcFile.getName();
+				
 				// Parse the Java source file using a Off-the-shelf Java Parser
 				List<String> javaSourceTextLines = FileUtils.readLines(srcFile);
 				jTokenizer.tokenize(javaSourceTextLines);
+				
 				for(ClassTokens c : jTokenizer.getClassTokens()) {
+					
 					String[] commentTokens = c.getCommentTokens();
 					String[] classTokens = c.getTokens();
 					for(String mId : c.getMethodIdentifiers()) {
@@ -108,12 +116,11 @@ public class JavaBagOfWords extends DefaultBagOfWords {
 						
 						if(methodChunk) {
 							// Add document to the vocabulary first before adding terms
-							String methodName = m.getIdentifier();
-							String classFolderName = FilenameUtils.removeExtension(srcFile.getName()); 
-							String docName =  classFolderName + ":" + methodName;							
-							String docref = getDocumentId(docName.replaceAll(" ", "_"));
-							String fileName = getDocumentId(methodName.replaceAll(" ", "_"));
-							
+							String folderName = c.getIdentifier();
+							String fileName = m.getIdentifier().replaceAll(" ", "_");							
+							String docName =  folderName + ":" + fileName;
+														
+							String docref = getDocumentId(docName);		
 							Vocabulary.getInstance().addDocument(docref, docName);
 							
 							addTerms(ArrayUtils.addAll(m.getTokens(), classTokens), docref);
@@ -126,15 +133,15 @@ public class JavaBagOfWords extends DefaultBagOfWords {
 							}
 							
 							// Check if method_chunk folder exists and Create folder with name of the class, create if not exists
-							File method_chunk_folder = new File(_outputDir, DEFAULT_OUTPUT_MCHUNK_DIR);
-							_outputDir = new File(method_chunk_folder, FilenameUtils.removeExtension(srcFile.getName()));
+							File methodChunkFolder = new File(_outputDir, DEFAULT_OUTPUT_MCHUNK_DIR);
+							
+							_outputDir = new File(methodChunkFolder, folderName);
 							if(!_outputDir.exists()) 
 								_outputDir.mkdirs();
 							
-							String name = hasOption(DefaultOptions.OUTPUT_SINGLE_FILE) ? docref : fileName;
-								
+							String outputFileName = hasOption(DefaultOptions.OUTPUT_SINGLE_FILE) ? docref : fileName;							System.out.println("-->" + outputFileName);	
 							// Write bow to the file
-							writeToOutput(name);
+							writeToOutput(outputFileName);
 							setupOutputDir(); // Set output dir back to the root to avoid recursive folder creation
 							reset();  // Reset so that next method tokens can 
 									  // be added as new document 
@@ -169,10 +176,11 @@ public class JavaBagOfWords extends DefaultBagOfWords {
 				
 				currentFile++;	// Update the counter
 				// print progress
-				CtrusHelper.progressMonitor("Progress - ", currentFile, totalFiles);
+				CtrusHelper.progressMonitor("Progress -", currentFile, totalFiles);
 			}
 			
-		} catch (Exception e) {			
+		} catch (Exception e) {		
+			CtrusHelper.printToConsole("Current file in process - " + currentFileInProcess);
 			e.printStackTrace();
 		}
 		

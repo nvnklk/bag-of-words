@@ -32,6 +32,7 @@ public class JavaBOWOptions extends DefaultOptions {
 //	public final static String RETAIN_COMPOUND_WORDS	= "retainCompoundWords";	
 	public final static String IGNORE_COMMENTS			= "ignoreComments";
 	public final static String NO_STEMMING				= "noStemming";
+	public final static String STATE_ANALYSIS			= "stateAnalysis";
 		
 	// Closed constructor
 	private JavaBOWOptions() {
@@ -67,6 +68,11 @@ public class JavaBOWOptions extends DefaultOptions {
 				.create(RETAIN_COMPOUND_WORDS);
 		addOption(o7);		
 */
+		
+		Option o8 =  OptionBuilder.hasArg(false)
+				.withDescription("Create BOW model for state analysis")
+				.create(STATE_ANALYSIS);
+		addOption(o8);				
 	}
 
 	@Override

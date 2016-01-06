@@ -105,7 +105,11 @@ public abstract class DefaultBagOfWords extends UnWeightedBagOfWords {
 		if(_singleFileOut){
 			IOUtils.write(doc + "=", _out);
 			writeTo(_out);
-		} else {			
+		} else {
+			// replace special characters in the file name 
+			doc = doc.replace('<','[');
+			doc = doc.replace('>',']');
+			
 			_out = new FileOutputStream(new File(_outputDir, doc));
 			writeTo(_out);					
 			_out.close();
@@ -113,9 +117,21 @@ public abstract class DefaultBagOfWords extends UnWeightedBagOfWords {
 		} 		
 	}	
 	
-	protected String getDocumentId(String fileName) {
-		return (_options.hasOption(DefaultOptions.PRESERVE_DOC_ID)) ?
-				fileName : CtrusHelper.uniqueId(fileName).toString();
+	protected String getDocumentId(String name) {
+		String did = (_options.hasOption(DefaultOptions.PRESERVE_DOC_ID)) 
+					? name : CtrusHelper.uniqueId(name).toString();
+		// Handle duplicate document names
+		// Duplicate names are appended with a count
+		Vocabulary voc = Vocabulary.getInstance(_options);
+		int count = 1;
+		String newid = null; 
+		while(voc.hasDocument(did)) {
+			newid = name + "_" + count;
+			did = (_options.hasOption(DefaultOptions.PRESERVE_DOC_ID)) 
+					? newid : CtrusHelper.uniqueId(newid).toString();
+			count++;
+		}
+		return did;
 	}
 	
 	protected Collection<File> getSourceDocuments(String wildCard) throws MissingOptionException {			
@@ -146,17 +162,17 @@ public abstract class DefaultBagOfWords extends UnWeightedBagOfWords {
 			
 			// Write terms
 			FileOutputStream fos1 = FileUtils.openOutputStream(new File(outputFileString1));
-			Vocabulary.getInstance().writeTermVocabularyTo(fos1);
+			Vocabulary.getInstance(_options).writeTermVocabularyTo(fos1);
 			fos1.close();
 			
 			// Write frequency
 			FileOutputStream fos2 = FileUtils.openOutputStream(new File(outputFileString2));
-			Vocabulary.getInstance().writeTermFrequencyTo(fos2);
+			Vocabulary.getInstance(_options).writeTermFrequencyTo(fos2);
 			fos2.close();
 			
 			// Write doc
 			FileOutputStream fos3 = FileUtils.openOutputStream(new File(outputFileString3));
-			Vocabulary.getInstance().writeDocVocabularyTo(fos3);
+			Vocabulary.getInstance(_options).writeDocVocabularyTo(fos3);
 			fos3.close();
 		}
 	}

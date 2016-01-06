@@ -4,7 +4,7 @@
   <groupId>ctrus.pa</groupId>
   <artifactId>BagOfWords</artifactId>
   <packaging>jar</packaging>
-  <version>0.2b</version>
+  <version>0.3b</version>
   <name>BagOfWords</name>
   <url>http://maven.apache.org</url>  
   <dependencies>
@@ -30,45 +30,10 @@
     	<version>3.3.2</version>
     </dependency>
     <dependency>
-    	<groupId>org.eclipse.core</groupId>
-    	<artifactId>contenttype</artifactId>
-    	<version>3.4.200-v20140207-1251</version>
-    </dependency>
-    <dependency>
-    	<groupId>org.eclipse.core</groupId>
-    	<artifactId>jobs</artifactId>
-    	<version>3.6.0-v20140424-0053</version>
-    </dependency>
-    <dependency>
-    	<groupId>org.eclipse.core</groupId>
-    	<artifactId>resources</artifactId>
-    	<version>3.3.0-v20070604</version>
-    </dependency>
-    <dependency>
-    	<groupId>org.eclipse.core</groupId>
-    	<artifactId>runtime</artifactId>
-    	<version>3.10.0-v20140318-2214</version>
-    </dependency>
-    <dependency>
-    	<groupId>org.eclipse.equinox</groupId>
-    	<artifactId>common</artifactId>
-    	<version>3.6.200-v20130402-1505</version>
-    </dependency>
-    <dependency>
-    	<groupId>org.eclipse.equinox</groupId>
-    	<artifactId>preferences</artifactId>
-    	<version>3.5.200-v20140224-1527</version>
-    </dependency>
-    <dependency>
-    	<groupId>org.eclipse.jdt</groupId>
-    	<artifactId>core</artifactId>
-    	<version>3.3.0-v_771</version>
-    </dependency>
-    <dependency>
-    	<groupId>org.eclipse.osgi</groupId>
-    	<artifactId>org.eclipse.osgi</artifactId>
-    	<version>3.7.1</version>
-    </dependency>
+	<groupId>org.eclipse.jdt</groupId>
+	<artifactId>org.eclipse.jdt.core</artifactId>
+	<version>3.10.0</version>
+	</dependency>        
     <dependency>
     	<groupId>org.mapdb</groupId>
     	<artifactId>mapdb</artifactId>

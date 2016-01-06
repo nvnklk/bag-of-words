@@ -40,7 +40,8 @@ public class Vocabulary implements Serializable {
 	private static AtomicLong term_counter = new AtomicLong(0);
 	private static AtomicLong doc_counter = new AtomicLong(0);
 	
-	private static Vocabulary _instance = null;
+	private static Vocabulary 	_instance = null;
+	private BOWOptions 			_options = null;
 	private ConcurrentNavigableMap<String, TermMeta> _termVocabulary = null;
 	private ConcurrentNavigableMap<Long, TermFreq> _termFrequency = null;
 	private ConcurrentNavigableMap<String, DocMeta> _docVocabulary = null;
@@ -70,7 +71,9 @@ public class Vocabulary implements Serializable {
 		public List<String> minHash = null;
 	}
 
-	private Vocabulary() {}
+	private Vocabulary(BOWOptions options) {
+		_options = options;
+	}
 	
 	private void init() {
 		// a disk based strategy to handle large numbers of vocabulary terms
@@ -102,9 +105,13 @@ public class Vocabulary implements Serializable {
 		}
 	}
 	
+	public boolean hasDocument(String docref) {
+		return _docVocabulary.containsKey(docref);
+	}
+	
 	public void addDocument(String docref, String file) {
 		// Add to vocabulary
-		if(!_docVocabulary.containsKey(docref)) {
+		if(!hasDocument(docref)) {
 			DocMeta dm = new DocMeta();
 			dm.doc_id = doc_counter.incrementAndGet();
 			dm.file_name = file;
@@ -150,14 +157,20 @@ public class Vocabulary implements Serializable {
 			TermFreq tfq = _termFrequency.get(bucket);
 			IOUtils.write(tfq.bucket + "," + tfq.freq + "\n", out);
 		}			
-	}	
+	}
 	
 	public static Vocabulary getInstance() {
+		// Quick fix, need to look at a good strategy to create and access instance
+		assert _instance != null : "Vocabulary not initialized with options";		
+		return _instance;
+	}
+	
+	public static Vocabulary getInstance(BOWOptions options) {
 		if(_instance == null) {
 			// Thread safety
 			synchronized(Vocabulary.class) {
 				if(_instance == null) {
-					_instance = new Vocabulary();
+					_instance = new Vocabulary(options);
 					_instance.init();
 				}
 			}
