@@ -4,9 +4,9 @@
   <groupId>ctrus.pa</groupId>
   <artifactId>BagOfWords</artifactId>
   <packaging>jar</packaging>
-  <version>0.3b</version>
+  <version>0.3.1b</version>
   <name>BagOfWords</name>
-  <url>http://maven.apache.org</url>  
+  <url>http://maven.apache.org</url>
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
@@ -33,7 +33,7 @@
 	<groupId>org.eclipse.jdt</groupId>
 	<artifactId>org.eclipse.jdt.core</artifactId>
 	<version>3.10.0</version>
-	</dependency>        
+	</dependency>
     <dependency>
     	<groupId>org.mapdb</groupId>
     	<artifactId>mapdb</artifactId>
@@ -45,7 +45,7 @@
   		<plugin>
 			<groupId>org.apache.maven.plugins</groupId>
 			<artifactId>maven-compiler-plugin</artifactId>
-			<version>2.5.1</version>			
+			<version>2.5.1</version>
 			<configuration>
 				<source>1.7</source>
 				<target>1.7</target>
