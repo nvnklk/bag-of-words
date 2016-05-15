@@ -86,6 +86,7 @@ specific extensions.
  	-printVocabulary		  	Print the vocabulary to a file 'voc.txt'	
  	-hashTerms <arg>		  	Hash the term if its length exceeds <arg>
 	-preserveDocId 		  	  	Retain the document ID or name from input file
+	-splitCamelCase 		  	Split camel cased words
 	
 Additional options for EnBagOfWords
 
@@ -93,13 +94,12 @@ Additional options for EnBagOfWords
 
 Additional options for JavaBagOfWords
 	
-	-splitCamelCase 		  	Split camel cased words
 	-retainCompoundWords	  	Retain compound terms (eg.camel cased) along with 
-								  split words
+								  	split words
 	-methodChunking 		  	Create BOW per method, default is per class
 	-ignoreComments		  	  	Ignore comments in source files
 	-considerCopyright		  	Consider terms from copyright notice in source files,
-								  ignored by default
+								  	ignored by default
 
 Extending
 ---------
