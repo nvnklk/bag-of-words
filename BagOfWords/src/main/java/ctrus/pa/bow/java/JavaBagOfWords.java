@@ -1,11 +1,17 @@
-/*
- * Copyright (C) 2015-16 Naveen Kulkarni.
+/*******************************************************************************
+ * Copyright (c) 2015, 2016 
  *
- * This file is part of Bag of Words program.
+ * This file is part of Bag of Words program. 
  *
- * You should have received a copy of the Apache License 2.0 License along 
- * with Bag of Words program. If not, see <http://www.apache.org/licenses/LICENSE-2.0>.
- */
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Contributors:
+ *     Naveen Kulkarni (naveen.kulkarni@research.iiit.ac.in)
+ *     
+ *******************************************************************************/
 
 package ctrus.pa.bow.java;
 
