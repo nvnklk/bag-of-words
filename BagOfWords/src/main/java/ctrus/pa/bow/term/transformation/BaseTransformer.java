@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2016 
+ * Copyright (c) 2015, 2016  Naveen Kulkarni
  *
  * This file is part of Bag of Words program. 
  *
