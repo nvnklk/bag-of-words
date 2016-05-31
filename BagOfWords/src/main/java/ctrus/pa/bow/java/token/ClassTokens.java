@@ -76,14 +76,14 @@ public class ClassTokens extends IdentifierTokens {
 		if(!_stateAnalysis) {
 			
 			// Add class name to token list
-			addToken(className);
+			addInterfaceToken(className);
 			
 			// Add interfaces and super class if any
 			if(cls.getSuperclassType() != null)
-				addToken(cls.getSuperclassType().toString());
+				addInterfaceToken(cls.getSuperclassType().toString());
 			List<Type> superInterfaces = (List<Type>)cls.superInterfaceTypes();
 			for(Type superInterface : superInterfaces) {
-				addToken(superInterface.toString());
+				addInterfaceToken(superInterface.toString());
 			}
 			
 			// Collect tokens from field declarations

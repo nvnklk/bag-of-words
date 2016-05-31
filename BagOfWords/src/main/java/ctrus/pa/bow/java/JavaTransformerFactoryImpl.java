@@ -21,8 +21,8 @@ package ctrus.pa.bow.java;
 
 import org.apache.commons.cli.MissingOptionException;
 
+import ctrus.pa.bow.DefaultOptions;
 import ctrus.pa.bow.core.BOWOptions;
-import ctrus.pa.bow.core.DefaultOptions;
 import ctrus.pa.bow.term.TermTransformer;
 import ctrus.pa.bow.term.transformation.BaseTransformerFactory;
 import ctrus.pa.party3.bow.stem.EnWordStemmer;

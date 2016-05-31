@@ -52,7 +52,22 @@ false
 null
 true
 
+# common types
+class
+object
+
+# common methods
 main
 print
 println
 system
+
+# default packages
+org
+w3c
+java
+javax
+apache
+lang
+util
+com

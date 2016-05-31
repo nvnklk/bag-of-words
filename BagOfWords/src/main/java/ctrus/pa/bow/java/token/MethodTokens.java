@@ -25,9 +25,9 @@ import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.Block;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
-import org.eclipse.jdt.core.dom.Name;
 import org.eclipse.jdt.core.dom.PrimitiveType;
 import org.eclipse.jdt.core.dom.SimpleName;
+import org.eclipse.jdt.core.dom.SimpleType;
 import org.eclipse.jdt.core.dom.SingleVariableDeclaration;
 import org.eclipse.jdt.core.dom.StringLiteral;
 import org.eclipse.jdt.core.dom.TagElement;
@@ -56,7 +56,7 @@ public class MethodTokens extends IdentifierTokens {
 		
         // Add method name
 		String methodName = mth.getName().getFullyQualifiedName();			
-		addToken(methodName);
+		addInterfaceToken(methodName);
         
         // Add method declaration parameters and create unique method name
         String uniqueMethodName = "";
@@ -64,8 +64,8 @@ public class MethodTokens extends IdentifierTokens {
 
         for(SingleVariableDeclaration param : (List<SingleVariableDeclaration>) mth.parameters()) {
         	if(!_stateAnalysis) {
-        		addToken(param.getName().getIdentifier());
-        		addToken(param.getType().toString());
+        		addInterfaceToken(param.getName().getIdentifier());
+        		addInterfaceToken(param.getType().toString());
         	}
         	uniqueMethodName = uniqueMethodName  + " " + param.getType().toString();  
         }	
@@ -77,12 +77,15 @@ public class MethodTokens extends IdentifierTokens {
         if (!mth.isConstructor()) {
         	boolean skipReturn = false;
         	Type mthReturn = mth.getReturnType2();
-        	if(mthReturn.isPrimitiveType()) {
+        	if(mthReturn == null) {
+        		skipReturn = true;
+        	}
+        	else if(mthReturn.isPrimitiveType()) {
         		if (PrimitiveType.VOID.equals(((PrimitiveType)mthReturn).getPrimitiveTypeCode()))
         			skipReturn = true;
         	}
         	if(!skipReturn)
-        		addToken(mthReturn.toString());
+        		addInterfaceToken(mthReturn.toString());
         }        
         
 		// update method identifier position in the Java source text
@@ -90,8 +93,8 @@ public class MethodTokens extends IdentifierTokens {
 		         
         // Add exceptions thrown by method
         if(!_stateAnalysis) {
-	        for(Name exception: (List<Name>) mth.thrownExceptionTypes()) {
-	        	addToken(exception.getFullyQualifiedName());
+	        for(Object exception: mth.thrownExceptionTypes()) {	        	
+	        	addInterfaceToken(((SimpleType) exception).getName().getFullyQualifiedName());
 	        }
         }
         

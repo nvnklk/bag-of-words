@@ -30,7 +30,6 @@ import org.apache.commons.lang3.NotImplementedException;
 
 import ctrus.pa.bow.term.TermFilteration;
 import ctrus.pa.bow.term.TermTransformation;
-import ctrus.pa.util.CtrusHelper;
 
 public abstract class UnWeightedBagOfWords implements BagOfWords {
 
@@ -38,14 +37,23 @@ public abstract class UnWeightedBagOfWords implements BagOfWords {
 	private TermTransformation 	_transformations 	= null;
 	private TermFilteration 	_filterations 		= null;
 		
-	public abstract void create();
-	
-	protected final void setTransformations(TermTransformation transformations) {
+	protected final UnWeightedBagOfWords setTransformations(TermTransformation transformations) {
 		_transformations = transformations;
+		return this;
 	}
 	
-	protected final void setFilterations(TermFilteration filterations) {
+	public double getTermCount() {
+		return _terms.size();
+	}
+	
+	protected final UnWeightedBagOfWords setFilterations(TermFilteration filterations) {
 		_filterations = filterations;
+		return this;
+	}
+	
+	
+	public final <E extends Enum<E>> void writeTo(OutputStream out, E identifier) throws IOException {
+		throw new NotImplementedException("WriteTo with identifier is not supported in UnWeightedBagOfWords");
 	}
 				
 	public final void writeTo(OutputStream out) throws IOException {
@@ -60,6 +68,10 @@ public abstract class UnWeightedBagOfWords implements BagOfWords {
 	public final void addTerm(String word, double weight) {
 		throw new NotImplementedException("Term weight is not supported in UnWeightedBagOfWords");	
 	}
+	
+	public final <E extends Enum<E>> void addTerm(String term, String doc, E identifier) {
+		throw new NotImplementedException("Term with identifier is not supported in UnWeightedBagOfWords");	
+	}		
 	
 	public final void addTerms(String[] terms, String doc) {
 		for(String term : terms)

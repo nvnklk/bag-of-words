@@ -21,8 +21,9 @@ package ctrus.pa.bow.en;
 
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.OptionBuilder;
+
+import ctrus.pa.bow.DefaultOptions;
 import ctrus.pa.bow.core.BOWOptions;
-import ctrus.pa.bow.core.DefaultOptions;
 
 public class EnBOWOptions extends DefaultOptions {
 

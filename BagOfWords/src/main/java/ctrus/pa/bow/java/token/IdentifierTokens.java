@@ -22,6 +22,7 @@ package ctrus.pa.bow.java.token;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 public abstract class IdentifierTokens implements ASTTokens {
@@ -30,6 +31,7 @@ public abstract class IdentifierTokens implements ASTTokens {
 	private static final String SPACE_REGX   		= "\\p{Space}";
 	
 	private String		 _identifier 	 = null;
+	private List<String> _interfaceTokens= new ArrayList<String>();
 	private List<String> _tokens 	 	 = new ArrayList<String>();
 	private List<String> _commentTokens  = new ArrayList<String>();
 	
@@ -64,20 +66,31 @@ public abstract class IdentifierTokens implements ASTTokens {
 	}
 	
 	@Override
-	public String[] getTokens() {
-		return _tokens.toArray(new String[0]);
+	public String[] getTokens() {		
+		return ArrayUtils.addAll(_interfaceTokens.toArray(new String[0]), 
+								 _tokens.toArray(new String[0]));		
 	}
 	
 	@Override
 	public String[] getCommentTokens() {
 		return _commentTokens.toArray(new String[0]);
 	}	
+	
+	@Override
+	public String[] getInterfaceTokens() {
+		return _interfaceTokens.toArray(new String[0]);
+	}
 
 	@Override
 	public void addToken(String token) {
 		_addToken(token, _tokens);
 	}
 	
+	@Override
+	public void addInterfaceToken(String token) {
+		_addToken(token, _interfaceTokens);
+	}
+		
 	@Override
 	public void addCommentToken(String token) {
 		_addToken(token, _commentTokens);

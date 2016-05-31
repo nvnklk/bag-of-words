@@ -193,19 +193,19 @@ public class JavaFileTokenizer extends ASTVisitor {
 	
 	@Override
 	public boolean visit(AnnotationTypeDeclaration node) {
-		System.out.println("Found custom annotation type - " + node.getName().getFullyQualifiedName());
+		//System.out.println("Found custom annotation type - " + node.getName().getFullyQualifiedName());
 		return true;
 	}
 	
 	@Override
 	public boolean visit(EnumDeclaration node) {
-		System.out.println("Found custom Enum type - " + node.getName().getFullyQualifiedName());
+		//System.out.println("Found custom Enum type - " + node.getName().getFullyQualifiedName());
 		return true;
 	}
 	
 	@Override
 	public boolean visit(NormalAnnotation node) {
-		System.out.println("Found Annotation - " + node.getTypeName());
+		//System.out.println("Found Annotation - " + node.getTypeName());
 		return true;
 	}
 }

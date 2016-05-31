@@ -17,27 +17,22 @@
  * with Bag of Words program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ctrus.pa.bow.core;
+package ctrus.pa.bow.java;
 
-import java.io.IOException;
-import java.io.OutputStream;
-
-public interface BagOfWords {
+public enum JavaStructureIdentifiers {
 	
-	public void create();
+	CLASS_INTERFACE		("class_interface"), 
+	COMMENTS			("comments"), 
+	METHOD_CONTENT		("method_content");
 	
-	public double getTermCount();
+	private String value;
 	
-	public void writeTo(OutputStream out) throws IOException;
+	// Intialize enum with a closed constructor
+	JavaStructureIdentifiers(String s) {
+		value = s;
+	}
 	
-	public <E extends Enum<E>> void writeTo(OutputStream out,  E identifier) throws IOException;
-	
-	public void addTerm(String word, double weight);
-		
-	public void addTerm(String term, String doc);
-	
-	public <E extends Enum<E>> void addTerm(String term, String doc, E identifier);
-			
-	public void reset();
-		
+	public String toString() {
+		return value;
+	}
 }

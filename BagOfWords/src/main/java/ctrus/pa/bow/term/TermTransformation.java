@@ -30,8 +30,9 @@ public class TermTransformation {
 		_transfomers = new ArrayList<TermTransformer>();
 	}
 	
-	public void addTransfomer(TermTransformer transformer) {
+	public TermTransformation addTransfomer(TermTransformer transformer) {
 		_transfomers.add(transformer);
+		return this;
 	}
 	
 	private String transform(String[] terms) {

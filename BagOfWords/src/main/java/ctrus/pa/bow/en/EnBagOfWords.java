@@ -26,9 +26,9 @@ import java.util.Iterator;
 
 import org.apache.commons.io.FileUtils;
 
+import ctrus.pa.bow.DefaultBagOfWords;
+import ctrus.pa.bow.DefaultOptions;
 import ctrus.pa.bow.core.BOWOptions;
-import ctrus.pa.bow.core.DefaultBagOfWords;
-import ctrus.pa.bow.core.DefaultOptions;
 import ctrus.pa.bow.core.Vocabulary;
 import ctrus.pa.bow.term.FilterFactory;
 import ctrus.pa.bow.term.TermFilteration;

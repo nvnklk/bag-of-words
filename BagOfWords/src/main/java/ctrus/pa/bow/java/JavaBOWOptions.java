@@ -22,8 +22,9 @@ package ctrus.pa.bow.java;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.OptionBuilder;
 
-import ctrus.pa.bow.core.DefaultOptions;
+import ctrus.pa.bow.DefaultOptions;
 
+@SuppressWarnings("serial")
 public class JavaBOWOptions extends DefaultOptions {
 	
 	public final static String METHOD_CHUNKING			= "methodChunking";	
@@ -33,6 +34,7 @@ public class JavaBOWOptions extends DefaultOptions {
 	public final static String IGNORE_COMMENTS			= "ignoreComments";
 	public final static String NO_STEMMING				= "noStemming";
 	public final static String STATE_ANALYSIS			= "stateAnalysis";
+	public final static String STRUCTURE_MULTI_BOW		= "structureBasedMultiBOW";
 		
 	// Closed constructor
 	private JavaBOWOptions() {
@@ -72,7 +74,12 @@ public class JavaBOWOptions extends DefaultOptions {
 		Option o8 =  OptionBuilder.hasArg(false)
 				.withDescription("Create BOW model for state analysis")
 				.create(STATE_ANALYSIS);
-		addOption(o8);				
+		addOption(o8);	
+		
+		Option o9 =  OptionBuilder.hasArg(false)
+				.withDescription("Create multiple Bag of Words based on Java code structure")
+				.create(STRUCTURE_MULTI_BOW);
+		addOption(o9);			
 	}
 
 	@Override

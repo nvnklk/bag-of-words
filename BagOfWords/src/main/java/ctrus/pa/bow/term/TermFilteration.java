@@ -30,8 +30,9 @@ public class TermFilteration {
 		_filters = new ArrayList<TermFilter>();
 	}
 	
-	public void addFilter(TermFilter filter) {
+	public TermFilteration addFilter(TermFilter filter) {
 		_filters.add(filter);
+		return this;
 	}
 	
 	// Filter true means remove the term

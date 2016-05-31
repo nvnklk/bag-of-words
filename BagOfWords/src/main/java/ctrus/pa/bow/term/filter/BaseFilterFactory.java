@@ -21,8 +21,8 @@ package ctrus.pa.bow.term.filter;
 
 import org.apache.commons.cli.MissingOptionException;
 
+import ctrus.pa.bow.DefaultOptions;
 import ctrus.pa.bow.core.BOWOptions;
-import ctrus.pa.bow.core.DefaultOptions;
 import ctrus.pa.bow.term.FilterFactory;
 import ctrus.pa.bow.term.TermFilter;
 import ctrus.pa.util.CtrusHelper;
