@@ -24,7 +24,9 @@ import org.apache.commons.cli.OptionBuilder;
 
 import ctrus.pa.bow.core.BOWOptionsImpl;
 
-public class DefaultOptions extends BOWOptionsImpl {
+public abstract class DefaultOptions extends BOWOptionsImpl {
+	
+	private static final long serialVersionUID = 1L;
 	
 	public final static String USE_WEIGHT 			 = "useWeight";
 	public final static String USE_STEMMING 		 = "useStemming";
@@ -166,11 +168,8 @@ public class DefaultOptions extends BOWOptionsImpl {
 		addOption(o21);
 		
 	}
-
-	@Override
-	public void defineOptions() {
 	
-	}
+	public abstract void defineOptions() ;
 
 	@Override
 	public String usageDescription() {

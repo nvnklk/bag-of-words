@@ -24,8 +24,10 @@ import org.apache.commons.cli.OptionBuilder;
 
 import ctrus.pa.bow.DefaultOptions;
 
-@SuppressWarnings("serial")
 public class JavaBOWOptions extends DefaultOptions {
+
+	
+	private static final long serialVersionUID = -2557201193069657135L;
 	
 	public final static String METHOD_CHUNKING			= "methodChunking";	
 	public final static String SPLIT_CAMELCASE			= "splitCamelCase";		
@@ -44,6 +46,8 @@ public class JavaBOWOptions extends DefaultOptions {
 	@SuppressWarnings("static-access")
 	@Override
 	public void defineOptions() {
+		
+		super.defineDefaultOptions();
 		
 		Option o1 =  OptionBuilder.hasArg(false)
 				.withDescription("Split camel cased terms")
@@ -100,6 +104,7 @@ public class JavaBOWOptions extends DefaultOptions {
 			// Lazy singleton
 			if(_instance == null) {
 				_instance = new JavaBOWOptions();
+				_instance.defineOptions();
 			}
 			return _instance;
 		}

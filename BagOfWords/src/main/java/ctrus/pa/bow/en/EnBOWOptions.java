@@ -27,6 +27,8 @@ import ctrus.pa.bow.core.BOWOptions;
 
 public class EnBOWOptions extends DefaultOptions {
 
+	private static final long serialVersionUID = 5228784712049378746L;
+
 	private static BOWOptions _instance = null;
 
 	public final static String SPLIT_CAMELCASE			= "splitCamelCase";
@@ -35,6 +37,7 @@ public class EnBOWOptions extends DefaultOptions {
 		// Lazy singleton
 		if(_instance == null) {
 			_instance = new EnBOWOptions();
+			_instance.defineOptions();
 		}
 		return _instance;
 	}
@@ -42,6 +45,8 @@ public class EnBOWOptions extends DefaultOptions {
 	@Override
 	@SuppressWarnings("static-access")
 	public void defineOptions() {
+		super.defineDefaultOptions();
+		
 		Option o1 =  OptionBuilder.hasArg(false)
 				.withDescription("Split camel cased terms")
 				.create(SPLIT_CAMELCASE);
