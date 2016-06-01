@@ -49,6 +49,9 @@
 			<configuration>
 				<source>1.7</source>
 				<target>1.7</target>
+			    <excludes>
+			      <exclude>ctrus/pa/party3/bow/stem/LovinsStemmer.java</exclude>
+			    </excludes>				
 			</configuration>
    		</plugin>
   	</plugins>
