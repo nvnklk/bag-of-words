@@ -1,5 +1,8 @@
 Bag of Words
 ============
+Version 0.4c
+
+
 Create a multiset (bag) of terms for a corpus where multiplicity of terms are 
 preserved but not the word order.
  
