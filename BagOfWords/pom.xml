@@ -4,14 +4,14 @@
   <groupId>ctrus.pa</groupId>
   <artifactId>BagOfWords</artifactId>
   <packaging>jar</packaging>
-  <version>0.4b</version>
+  <version>0.4c</version>
   <name>BagOfWords</name>
   <url>http://maven.apache.org</url>
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>3.8.1</version>
+      <version>4.12</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -51,9 +51,57 @@
 				<target>1.7</target>
 			    <excludes>
 			      <exclude>ctrus/pa/party3/bow/stem/LovinsStemmer.java</exclude>
-			    </excludes>				
+			    </excludes>
 			</configuration>
    		</plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>2.19.1</version>
+        <dependencies>
+          <dependency>
+            <groupId>org.apache.maven.surefire</groupId>
+            <artifactId>surefire-junit4</artifactId>
+            <version>2.19.1</version>
+          </dependency>
+        </dependencies>
+      </plugin>
+      <!--
+      <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>cobertura-maven-plugin</artifactId>
+          <version>2.6</version>
+          <configuration>
+            <instrumentation>
+              <includes>
+                <include>ctrus/pa/**/*.class</include>
+              </includes>
+            </instrumentation>
+            <formats>
+                  <format>html</format>
+                  <format>xml</format>
+              </formats>
+              <check>
+                  <haltOnFailure>false</haltOnFailure>
+              </check>
+          </configuration>
+          <executions>
+              <execution>
+                  <id>cobertura-clean</id>
+                  <phase>clean</phase>
+                  <goals>
+                      <goal>clean</goal>
+                  </goals>
+              </execution>
+              <execution>
+                  <id>cobertura-instrument</id>
+                  <phase>process-classes</phase>
+                  <goals>
+                      <goal>instrument</goal>
+                  </goals>
+              </execution>
+          </executions>
+      </plugin> -->
   	</plugins>
   	<resources>
   		<resource>
@@ -64,5 +112,24 @@
   		</resource>
   	</resources>
   </build>
+  <reporting>
+    <outputDirectory>${project.build.directory}/site</outputDirectory>
+    <plugins>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>cobertura-maven-plugin</artifactId>
+        <version>2.6</version>
+        <configuration>
+          <instrumentation>
+            <ignoreTrivial>true</ignoreTrivial>
+          </instrumentation>
+          <formats>
+            <format>html</format>
+            <format>xml</format>
+          </formats>
+        </configuration>
+      </plugin>
+    </plugins>
+  </reporting>
   <description>The Bag-Of-Words module provides a basic scaffolding to easily construct a bag-of-words model from a corpus of documents.</description>
 </project>

@@ -1,5 +1,6 @@
 .classpath
 .project
+pom-infy-nexus.xml
 /target/
-
+/src/test/
 /src/test/output

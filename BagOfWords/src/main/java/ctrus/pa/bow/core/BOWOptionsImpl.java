@@ -59,7 +59,6 @@ public abstract class BOWOptionsImpl implements BOWOptions, Serializable {
 			_parsedOptions = p.parse(_cliOptions, args, true);			
 		} catch(MissingOptionException ex) {			
 			printHelp(ex.getMessage(), new PrintWriter(System.out));
-			System.exit(1);
 		}
 		
 	}

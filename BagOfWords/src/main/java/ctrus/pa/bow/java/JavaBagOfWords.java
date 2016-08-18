@@ -99,7 +99,7 @@ public class JavaBagOfWords {
 			JavaDefaultBagOfWords jBow = new JavaDefaultBagOfWords();
 			jBow.setup(_opts);
 			jBow.create();
-			jBow.printVocabulary();
+			jBow.printVocabulary(true);
 		}
 		
 	}

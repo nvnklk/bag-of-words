@@ -154,6 +154,12 @@ public class Vocabulary implements Serializable {
 			IOUtils.write(tfq.bucket + "," + tfq.freq + "\n", out);
 		}			
 	}
+
+	public final void reset() {
+		_termVocabulary.clear();
+		_termFrequency.clear();
+		_docVocabulary.clear();
+	}
 	
 	public static Vocabulary getInstance() {
 		// Quick fix, need to look at a good strategy to create and access instance

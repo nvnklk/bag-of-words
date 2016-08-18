@@ -74,6 +74,9 @@ public abstract class DefaultBagOfWords extends UnWeightedBagOfWords {
 				e.printStackTrace();
 			}
 		}
+
+		// Setup vocabulary
+		Vocabulary voc = Vocabulary.getInstance(_options);		
 		
 		// perform additional setup
 		setup();
@@ -116,19 +119,29 @@ public abstract class DefaultBagOfWords extends UnWeightedBagOfWords {
 	}	
 	
 	protected String getDocumentId(String name) {
+
+		Vocabulary voc = Vocabulary.getInstance(_options);
 		String did = (_options.hasOption(DefaultOptions.PRESERVE_DOC_ID)) 
 					? name : CtrusHelper.uniqueId(name).toString();
+		
+		// Below lines of code was to ensure that there are no duplicate file names as 
+		// getSourceDocuments(String) was returning all files under directory along with 
+		// its sub-directory. 
+
+		/*
 		// Handle duplicate document names
-		// Duplicate names are appended with a count
-		Vocabulary voc = Vocabulary.getInstance(_options);
+		// Duplicate names are appended with a count		
 		int count = 1;
 		String newid = null; 
+
 		while(voc.hasDocument(did)) {
 			newid = name + "_" + count;
 			did = (_options.hasOption(DefaultOptions.PRESERVE_DOC_ID)) 
 					? newid : CtrusHelper.uniqueId(newid).toString();
 			count++;
 		}
+		*/
+		
 		return did;
 	}
 	
@@ -136,13 +149,30 @@ public abstract class DefaultBagOfWords extends UnWeightedBagOfWords {
 		File sourceDir = new File(_options.getOption(DefaultOptions.SOURCE_DIR));
 		CtrusHelper.printToConsole("Choosen source folder - " + sourceDir.getAbsolutePath());		
 		if(sourceDir.exists()){
-			return FileUtils.listFiles(sourceDir, new WildcardFileFilter(wildCard), DirectoryFileFilter.DIRECTORY);
+			// Below lines of code was to provide all the files under a directory along with its sub-directories
+			/*
+			return FileUtils.listFiles(sourceDir, new WildcardFileFilter(wildCard), DirectoryFileFilter.DIRECTORY);			
+			*/
+
+			// Provide only the files under the current directory (file under sub directories are not included)
+			// Handle the wildcards
+			if (wildCard.equals("*")) {
+				return FileUtils.listFiles(sourceDir, null, false);
+			} else if (wildCard.startsWith("*.")) {				
+				String newWildCard = wildCard.substring(2);
+				String[] exts = {newWildCard};
+				return FileUtils.listFiles(sourceDir, exts, false);
+			} else {
+				String[] exts = {wildCard};
+				return FileUtils.listFiles(sourceDir, exts, false);
+			}
+			
 		} else {
 			throw new MissingOptionException("Unable to find source directory!");
 		}
 	}
 	
-	public void printVocabulary() throws IOException {
+	public void printVocabulary(boolean clearVocabulary) throws IOException {
 		if(_options.hasOption(DefaultOptions.PRINT_VOCABULARY)) {
 			String outputFileString;
 			try {
@@ -171,7 +201,11 @@ public abstract class DefaultBagOfWords extends UnWeightedBagOfWords {
 			// Write doc
 			FileOutputStream fos3 = FileUtils.openOutputStream(new File(outputFileString3));
 			Vocabulary.getInstance(_options).writeDocVocabularyTo(fos3);
-			fos3.close();
+			fos3.close();			
+		}
+
+		if(clearVocabulary) {
+			Vocabulary.getInstance().reset();
 		}
 	}
 }

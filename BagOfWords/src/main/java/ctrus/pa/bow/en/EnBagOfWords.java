@@ -134,7 +134,7 @@ public class EnBagOfWords extends DefaultBagOfWords {
 			EnBagOfWords eBow = new EnBagOfWords();
 			eBow.setup(opts);
 			eBow.create();
-			eBow.printVocabulary();
+			eBow.printVocabulary(true);
 		}
 	}
 

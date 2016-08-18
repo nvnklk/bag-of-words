@@ -32,7 +32,7 @@ public class EnWordStemmer extends StemmingTransformer {
 	private EnWordStemmerAlgo 	stemmerAlgo = null;
 	private PorterStemmer 		porter 		= null;
 	private SnowballStemmer 	snowball 	= null;
-	private PaiceStemmer 		paice 		= null;
+	//private PaiceStemmer 		paice 		= null;
 	//private LovinsStemmer		lovins 		= null;
 
 	// Closed Constructor
@@ -49,11 +49,11 @@ public class EnWordStemmer extends StemmingTransformer {
 			case SNOWBALL:
 							snowball = new SnowballStemmer();
 							break;
-			case PAICE:
+			/*case PAICE:
 							String rules = this.getClass().getResource("paice.rules").getFile();
-							paice = new PaiceStemmer(rules, "/p");
-			case LOVINS:	
-							//lovins = new LovinsStemmer();
+							paice = new PaiceStemmer(rules, "/p");*/
+			/*case LOVINS:	
+							lovins = new LovinsStemmer();*/
 			case MSTEM:
 			case KSTEM:										
 		}
@@ -87,12 +87,12 @@ public class EnWordStemmer extends StemmingTransformer {
 							snowball.stem();
 							stemmedWord = snowball.getCurrent();
 							break;
-			case PAICE:
+			/*case PAICE:
 							stemmedWord = paice.stripAffixes(word);
-							break;
-			case LOVINS:	
-							//stemmedWord = lovins.stem(word);
-							//break;
+							break;*/
+			/*case LOVINS:	
+							stemmedWord = lovins.stem(word);
+							break;*/
 			case MSTEM:													
 			case KSTEM:
 			default:
